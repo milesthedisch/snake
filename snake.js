@@ -93,7 +93,7 @@ window.addEventListener('DOMContentLoaded', function () {
 		drawCircle(centerX, centerY, radius, "red");
 		//check for food being eaten
 		// eat(eatCheck())
-		eatCheck()
+		eat(eatCheck())
 	}
 
 	// Event listener
@@ -116,26 +116,29 @@ window.addEventListener('DOMContentLoaded', function () {
     //Feed ME
 
 	function eatCheck(){
-		if (Math.pow(x-centerX , 2) + Math.pow(y-centerY, 2) <= Math.pow(radSnake+radius, 2) && Math.PI ){
-			console.log('ym')
+		if (Math.pow(x-centerX , 2) + Math.pow(y-centerY, 2) <= Math.pow(radSnake+radius+4, 2)) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	// function eat(check){
-	// 	if (check) {
-	// 		var yTmp = randPos(30, 400 - 30)
-	// 		var xTmp = randPos(30, 400 - 30)
-	// 		centerX = Math.pow(x-centerX , 2) + Math.pow(y-centerY, 2) <= Math.pow(radSnake+radius, 2) && Math.PI 
-	//   			 // 30 is the radius of the food, couldnt reference the var in here.
-	// 			centerY = randPos(30, 400 - 30);
-	// 		}
-	// 		radSnake += 1;
-	// 		console.log('nom')
-	// 	}
-	// }
+	function eat(check){
+		if (check) {
+			var yTmp = randPos(30, 400 - 30)
+			var xTmp = randPos(30, 400 - 30)
+			var checker = Math.pow(x-xTmp , 2) + Math.pow(y-yTmp, 2) <= Math.pow(radSnake+radius, 2)
+			if (!checker && check) {	
+				centerY = yTmp
+				centerX = xTmp
+				radSnake += 5
+				return;
+			} else if (checker) {
+				eat()
+				return;
+			}
+		}	
+	}
 
 
 });
