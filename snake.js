@@ -1,144 +1,184 @@
-window.addEventListener('DOMContentLoaded', function () {
+// Snake Constructor
+var Snake = function (canvas) {
+    'use strict';
 
-	// c is context, x is the x position and y is the y position //
+    // Values
+    this.canvas = canvas;
+    this.context = this.canvas.getContext('2d');
+    this.canvasWidth = canvas.getOffsetWidth;
+    this.canvasHeight = this.getOffsetHeight;
+    this.canvasGridSize = 10;
+    this.x = 200;
+    this.y = 100;
+    this.dx = 0;
+    this.dy = 0;
+    this.fx = this.randPos(30, 640 - 30);
+    this.fy = this.randPos(30, 640 - 30);
+    this.radSnake = 50;
+    this.radius = 30;
 
-	var c, x, y, dx, dy;
-	var canvas;
-	var food;
-	var reqAnimId;
+    // Call init
+    this.init();
+};
 
-	//KEYS
+Snake.prototype.init = function () {
+    'use strict';
 
-	var W = 'w'.charCodeAt(0),
-		A = 'a'.charCodeAt(0),
-		S = 's'.charCodeAt(0),
-		D = 'd'.charCodeAt(0)
+    this.animate();
+};
 
-	init();
-	animate();
+Snake.prototype.animate = function () {
+    'use strict';
 
-	// initate the canvas
+    this.draw();
+    window.requestAnimationFrame(this.animate.bind(this));
+};
 
-	function init() {
-		// creating the canvas and the context
-		canvas = document.getElementById("canvas");
-    	c = canvas.getContext("2d");
-   		// the actual position
-   		y = 0;
-    	x = 0;
-    	// the foods position
-    	fx = randPos(30, 400 - 30)
-    	fy = randPos(30, 400 - 30)
-    	// the direction
-    	dx = 0;
-    	dy = 1;
-	}
+Snake.prototype.movement = function (directionX, directionY) {
+    'use strict';
 
-	//Foods how big?
+    this.dx = directionX;
+    this.dy = directionY;
+};
 
-	var centerX = fx,
-		centerY = fy,
-		radSnake = 50,
-		radius = 30,
-		x = 200,
-		y = 100;
-		
+Snake.prototype.randPos = function (min, max) {
+    'use strict';
 
-	// initiate the animationFrame
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+};
 
-	function animate() {
-		reqAnimId = window.requestAnimationFrame(animate)
-		draw();
-	}
+Snake.prototype.drawCircle = function (centerX, centerY, radius, colour) {
+    'use strict';
 
-	// Check movements
+    this.context.beginPath();
+    this.context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+    this.context.fillStyle = colour;
+    this.context.fill();
+};
 
-	function movement(directionX, directionY){
-		dx = directionX;
-		dy = directionY;
-	}
+Snake.prototype.draw = function () {
+    'use strict';
 
-	function randPos(min, max) {
-    	return Math.floor(Math.random() * (max - min + 1)) + min;
-	}
+    // X and y are bound by the canavs height and width
 
-	function drawCircle(centerX, centerY, radius, colour) {
-		c.beginPath();
-		c.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-		c.fillStyle = colour;
-		c.fill();
-	}
+    if (this.x < (0 + this.radSnake) || this.y < (0 + this.radSnake) || this.x > (this.canvasWidth - this.radSnake) || this.y > (this.canvasHeight - this.radSnake))  {
+        this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+        window.cancelAnimationFrame(reqAnimId);
+        console.log("DEAD!");
+        return;
+    }
 
-	// Draw the shape on render
+    // c.clearRect(0,0,canvas.width,canvas.height);
 
-	function draw() {
+    this.context.fillStyle = '#87CEEB';
 
-		// X and y are bound by the canavs height and width
+    // x += dx;
+    // y += dy;
 
-		if (x < (0 + radSnake) || y < (0 + radSnake) || x > (canvas.width - radSnake) || y > (canvas.height - radSnake))  {
-			c.clearRect(0,0,canvas.width,canvas.height);
-			window.cancelAnimationFrame(reqAnimId);
-			alert("animation done!");
-			return;
-		}
+    /*
+    snake.forEach(function(snk, i){
+        drawCircle(snk.x, snk.y, radSnake, "skyblue")
+        snk.unshift()
+        snk.push({x: x, y: y})
+    })
+    */
+    
+    // make grid //
+    this.grid(this.canvasWidth, this.canvasHeight, this.canvasGridSize)
+    //  [][][]  //
 
-		c.clearRect(0,0,canvas.width,canvas.height);
-		c.fillStyle = '#87CEEB';
+    this.drawCircle(this.x, this.y, this.radSnake, "skyblue");
 
-		x += dx;
-		y += dy;
+    this.drawCircle(this.fx, this.fy, this.radius, "red");
+    //check for food being eaten
+    // eat(eatCheck())
+    // eat(eatCheck())
+};
 
-		drawCircle(x, y, radSnake, "skyblue");
+Snake.prototype.eatCheck = function () {
+    'use strict';
 
-		drawCircle(centerX, centerY, radius, "red");
-		//check for food being eaten
-		// eat(eatCheck())
-		eat(eatCheck())
-	}
+    if (Math.pow(this.x - this.fx , 2) + Math.pow(this.y - this.fy, 2) <= Math.pow(this.radSnake + this.radius + 4, 2)) {
+        return true;
+    }
 
-	// Event listener
+    else {
+        return false;
+    }
+};
 
-	function code(e) {
-	    e = e || window.event;
-	    return(e.keyCode || e.which);
-	}
+Snake.prototype.eat = function (check) {
+    'use strict';
 
-    document.onkeypress = function(e){
-	        var key = code(e);
-	        switch (key) {
-	        	case W: movement(0, -1); break;
-	        	case A: movement(-1, 0); break;
-	        	case S: movement(0, 1); break;
-	  	        case D: movement(1, 0); break;
-  	        }
-	};
+    if (check) {
+        var yTmp = this.randPos(30, 640 - 30);
+        var xTmp = this.randPos(30, 640 - 30);
+        var checker = Math.pow(this.x - xTmp , 2) + Math.pow(this.y - yTmp, 2) <= Math.pow(this.radSnake + this.radius, 2);
 
-    //Feed ME
+        if (!checker && check) {
+            this.fy = yTmp;
+            this.fx = xTmp;
+            this.radSnake += 5;
 
-	function eatCheck(){
-		if (Math.pow(x-centerX , 2) + Math.pow(y-centerY, 2) <= Math.pow(radSnake+radius+4, 2)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+            return;
+        }
 
-	function eat(check){
-		if (check) {
-			var yTmp = randPos(30, 400 - 30)
-			var xTmp = randPos(30, 400 - 30)
-			var checker = Math.pow(x-xTmp , 2) + Math.pow(y-yTmp, 2) <= Math.pow(radSnake+radius, 2)
-			if (!checker && check) {	
-				centerY = yTmp
-				centerX = xTmp
-				radSnake += 5
-				return;
-			} else if (checker) {
-				eat()
-				return;
-			}
-		}	
-	}
+        else if (checker) {
+            this.eat();
 
+            return;
+        }
+    }
+};
 
-});
+Snake.prototype.drawGridLines = function () {
+    'use strict';
+
+    for (var i = 0; i < Math.floor(this.canvasWidth / this.canvasGridSize); i++) {
+        this.context.beginPath();
+        this.context.moveTo(0, i * this.canvasGridSize);
+        this.context.lineTo(0, this.canvasWidth);
+        this.context.stroke();
+    }
+
+    // Vertical lines
+    for (var j = 0; j < Math.floor(this.canvasHeight / this.canvasGridSize); j++) {
+        this.context.beginPath();
+        this.context.moveTo(j * this.canvasGridSize, 0);
+        this.context.lineTo(this.canvasHeight, 0);
+        this.context.stroke();
+    }
+};
+
+Snake.prototype.bindEventListeners = function () {
+    'use strict';
+
+    document.onkeypress = function (e) {
+
+        var key = String.fromCharCode(e.keycode);
+
+        switch (key) {
+            case 'W': {
+                this.movement(0, -1);
+                break;
+            }
+
+            case 'A': {
+                this.movement(-1, 0);
+                break;
+            }
+
+            case 'S': {
+                this.movement(0, 1);
+                break;
+            }
+
+            case 'D': {
+                this.movement(1, 0);
+                break;
+            }
+        }
+    };
+};
+
+var myGame = new Snake(document.querySelector('canvas'));
