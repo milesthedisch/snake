@@ -11,7 +11,7 @@ var Snake = function (canvas) {
     this.x = 200;
     this.y = 100;
     this.dx = 0;
-    this.dy = 0;
+    this.dy = 1;
     this.fx = this.randPos(30, 640 - 30);
     this.fy = this.randPos(30, 640 - 30);
     this.radSnake = 50;
@@ -64,6 +64,19 @@ Snake.prototype.drawCircle = function (centerX, centerY, radius, colour) {
     this.context.fill();
 };
 
+Snake.prototype.drawSnake = function () {
+    'use strict';
+    var _this = this;
+    var length = 5;
+    this.snake = [];
+    for (var i = length - 1; i >= 0; i--) {
+        this.snake.push({x: i * this.canvasGridSize, y: 0})
+    }
+    this.snake.forEach(function(s){
+        _this.context.rect(s.x, s.y, _this.canvasGridSize, _this.canvasGridSize);   
+    })
+}
+
 Snake.prototype.draw = function () {
     'use strict';
 
@@ -79,6 +92,7 @@ Snake.prototype.draw = function () {
     */
     
     // make grid //
+    this.drawSnake()
     this.drawGridLines(this.canvasWidth, this.canvasHeight, this.canvasGridSize)
     //  [][][]  //
 
@@ -107,7 +121,6 @@ Snake.prototype.eatCheck = function () {
     'use strict';
 
     if (Math.pow(this.x - this.fx , 2) + Math.pow(this.y - this.fy, 2) <= Math.pow(this.radSnake + this.radius + 4, 2)) {
-        console.log('nom')
         return true;
     }
 
@@ -126,6 +139,7 @@ Snake.prototype.eat = function (check) {
             this.fy = yTmp;
             this.fx = xTmp;
             this.radSnake += 5;
+            console.log('nom');
 
             return;
         }
@@ -159,29 +173,29 @@ Snake.prototype.drawGridLines = function () {
 
 Snake.prototype.bindEventListeners = function () {
     'use strict';
-
+    var _this = this;
     document.onkeypress = function (e) {
 
-        var key = String.fromCharCode(e.keycode);
+        var key = String.fromCharCode(e.keyCode);
 
         switch (key) {
-            case 'W': {
-                this.movement(0, -1);
+            case 'w': {
+                _this.movement(0, -1);
                 break;
             }
 
-            case 'A': {
-                this.movement(-1, 0);
+            case 'a': {
+                _this.movement(-1, 0);
                 break;
             }
 
-            case 'S': {
-                this.movement(0, 1);
+            case 's': {
+                _this.movement(0, 1);
                 break;
             }
 
-            case 'D': {
-                this.movement(1, 0);
+            case 'd': {
+                _this.movement(1, 0);
                 break;
             }
         }
