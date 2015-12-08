@@ -4,8 +4,8 @@ var Snake = function (canvas) {
     // Values
     this.canvas = canvas;
     this.context = this.canvas.getContext('2d');
-    this.canvasWidth = canvas.getOffsetWidth;
-    this.canvasHeight = this.getOffsetHeight;
+    this.canvasWidth = this.canvas.offsetWidth;
+    this.canvasHeight = this.canvas.offsetHeight;
     this.canvasGridSize = 10;
     this.x = 200;
     this.y = 100;
@@ -16,6 +16,8 @@ var Snake = function (canvas) {
     this.radSnake = 50;
     this.radius = 30;
 
+    window.thing = this.canvas;
+
     // Call init
     this.init();
 };
@@ -23,11 +25,18 @@ var Snake = function (canvas) {
 Snake.prototype.init = function () {
     'use strict';
     this.bindEventListeners();
-    this.animateRef = window.requestAnimationFrame(this.animate.bind(this));
+    this.animate()
 };
 
 Snake.prototype.animate = function () {
     'use strict';   
+    var _this = this
+    this.ref = window.requestAnimationFrame(_this.animate.bind(_this))  
+    if (this.update() === true) {
+       window.cancelAnimationFrame(this.ref)
+    } 
+
+    this.update()
     this.draw();
 };
 
@@ -40,8 +49,9 @@ Snake.prototype.movement = function (directionX, directionY) {
 
 Snake.prototype.randPos = function (min, max) {
     'use strict';
-
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+    if (typeof min === 'number' && typeof max === 'number') {
+        return Math.floor(Math.random() * (max - min + 1)) + min;    
+    }
 };
 
 Snake.prototype.drawCircle = function (centerX, centerY, radius, colour) {
@@ -56,21 +66,9 @@ Snake.prototype.drawCircle = function (centerX, centerY, radius, colour) {
 Snake.prototype.draw = function () {
     'use strict';
 
-    // X and y are bound by the canavs height and width
-
-    if (this.x < (0 + this.radSnake) || this.y < (0 + this.radSnake) || this.x > (this.canvasWidth - this.radSnake) || this.y > (this.canvasHeight - this.radSnake))  {
-        this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-        window.cancelAnimationFrame(this.animateRef);
-        console.log("DEAD!");
-        return;
-    }
-
     this.context.clearRect(0,0,canvas.width,canvas.height);
 
     this.context.fillStyle = '#87CEEB';
-
-    this.x += this.dx;
-    this.y += this.dy;
 
     /*
     snake.forEach(function(snk, i){
@@ -87,15 +85,29 @@ Snake.prototype.draw = function () {
     this.drawCircle(this.x, this.y, this.radSnake, "skyblue");
 
     this.drawCircle(this.fx, this.fy, this.radius, "red");
-    //check for food being eaten
-    this.eat(this.eatCheck())
-    // eat(eatCheck())
 };
+
+Snake.prototype.update = function () {
+    'use strict';
+
+    // X and y are bound by the canavs height and width.
+    // edge collition detection.
+
+    if (this.x < (0 + this.radSnake) || this.y < (0 + this.radSnake) || this.x > (this.canvasWidth - this.radSnake) || this.y > (this.canvasHeight - this.radSnake))  {
+        this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+        return true;
+    }
+
+    this.x += this.dx
+    this.y += this.dy
+    this.eat(this.eatCheck())
+}
 
 Snake.prototype.eatCheck = function () {
     'use strict';
 
     if (Math.pow(this.x - this.fx , 2) + Math.pow(this.y - this.fy, 2) <= Math.pow(this.radSnake + this.radius + 4, 2)) {
+        console.log('nom')
         return true;
     }
 
@@ -106,12 +118,10 @@ Snake.prototype.eatCheck = function () {
 
 Snake.prototype.eat = function (check) {
     'use strict';
-
     if (check) {
         var yTmp = this.randPos(30, 640 - 30);
         var xTmp = this.randPos(30, 640 - 30);
         var checker = Math.pow(this.x - xTmp , 2) + Math.pow(this.y - yTmp, 2) <= Math.pow(this.radSnake + this.radius, 2);
-
         if (!checker && check) {
             this.fy = yTmp;
             this.fx = xTmp;
@@ -130,19 +140,19 @@ Snake.prototype.eat = function (check) {
 
 Snake.prototype.drawGridLines = function () {
     'use strict';
-
-    for (var i = 0; i < Math.floor(this.canvasWidth / this.canvasGridSize); i++) {
+    for (var i = 0; i < Math.round(this.canvasWidth / this.canvasGridSize); i++) {
         this.context.beginPath();
-        this.context.moveTo(0, i * this.canvasGridSize);
-        this.context.lineTo(0, this.canvasWidth);
+        this.context.moveTo(0, (i * this.canvasGridSize));
+        this.context.lineTo(this.canvasWidth, i * this.canvasGridSize);
+        this.context.closePath();
         this.context.stroke();
     }
 
     // Vertical lines
-    for (var j = 0; j < Math.floor(this.canvasHeight / this.canvasGridSize); j++) {
+    for (var j = 0; j < Math.round(this.canvasHeight / this.canvasGridSize); j++) {
         this.context.beginPath();
         this.context.moveTo(j * this.canvasGridSize, 0);
-        this.context.lineTo(this.canvasHeight, 0);
+        this.context.lineTo(this.canvasGridSize * j, this.canvasHeight);
         this.context.stroke();
     }
 };
