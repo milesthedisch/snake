@@ -7,6 +7,7 @@ var Snake = function (canvas) {
     this.canvasWidth = this.canvas.offsetWidth;
     this.canvasHeight = this.canvas.offsetHeight;
     this.canvasGridSize = 10;
+
     this.x = 200;
     this.y = 100;
     this.dx = 0;
@@ -15,6 +16,8 @@ var Snake = function (canvas) {
     this.fy = this.randPos(30, 640 - 30);
     this.radSnake = 50;
     this.radius = 30;
+
+    this.snake = [];
 
     window.thing = this.canvas;
 
@@ -66,30 +69,46 @@ Snake.prototype.drawCircle = function (centerX, centerY, radius, colour) {
 
 Snake.prototype.drawSnake = function () {
     'use strict';
+    debugger;
+    this.context.fillRect(0,0, this.canvasWidth, this.canvasHeight)
 
     var _this = this;
-    var length = 5;
-    this.snake = [];
+    var length = 5;     
+
     for (var i = length - 1; i >= 0; i--) {
         this.snake.push({x: i * this.canvasGridSize, y: 0})
     }
+
+    var nx = this.snake[0].x 
+    var ny = this.snake[0].y
+    var nx = nx + 1 * this.canvasGridSize
+
+    var tail = this.snake.pop();
+        tail.x = nx
+    this.snake.unshift(tail)
+
     this.snake.forEach(function(s){
-        _this.context.rect(s.x, s.y, _this.canvasGridSize, _this.canvasGridSize);   
+        _this.context.fillStyle = 'green'
+        _this.context.fillRect(s.x, s.y, _this.canvasGridSize, _this.canvasGridSize)     
     })
 }
 
 Snake.prototype.draw = function () {
     'use strict';
+    var _this = this;
 
+    //clear every frame
     this.context.clearRect(0,0,canvas.width,canvas.height);
 
-    this.context.fillStyle = '#87CEEB';
+    this.context.fillStyle = '#ffffff';
 
+    // Drawing snake //
     this.drawSnake()
 
+    // Drawing Grid //
     this.drawGridLines(this.canvasWidth, this.canvasHeight, this.canvasGridSize)
-    //  [][][]  //
 
+    // Draw moving circles //
     this.drawCircle(this.x, this.y, this.radSnake, "skyblue");
 
     this.drawCircle(this.fx, this.fy, this.radius, "red");
@@ -106,8 +125,12 @@ Snake.prototype.update = function () {
         return true;
     }
 
+
+   
+
     this.x += this.dx
     this.y += this.dy
+
     this.eat(this.eatCheck())
 }
 
