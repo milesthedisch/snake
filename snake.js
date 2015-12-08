@@ -36,7 +36,8 @@ Snake.prototype.animate = function () {
        window.cancelAnimationFrame(this.ref)
     } 
 
-    this.update()
+    this.update();
+
     this.draw();
 };
 
@@ -63,6 +64,20 @@ Snake.prototype.drawCircle = function (centerX, centerY, radius, colour) {
     this.context.fill();
 };
 
+Snake.prototype.drawSnake = function () {
+    'use strict';
+
+    var _this = this;
+    var length = 5;
+    this.snake = [];
+    for (var i = length - 1; i >= 0; i--) {
+        this.snake.push({x: i * this.canvasGridSize, y: 0})
+    }
+    this.snake.forEach(function(s){
+        _this.context.rect(s.x, s.y, _this.canvasGridSize, _this.canvasGridSize);   
+    })
+}
+
 Snake.prototype.draw = function () {
     'use strict';
 
@@ -70,15 +85,8 @@ Snake.prototype.draw = function () {
 
     this.context.fillStyle = '#87CEEB';
 
-    /*
-    snake.forEach(function(snk, i){
-        drawCircle(snk.x, snk.y, radSnake, "skyblue")
-        snk.unshift()
-        snk.push({x: x, y: y})
-    })
-    */
-    
-    // make grid //
+    this.drawSnake()
+
     this.drawGridLines(this.canvasWidth, this.canvasHeight, this.canvasGridSize)
     //  [][][]  //
 
@@ -126,6 +134,7 @@ Snake.prototype.eat = function (check) {
             this.fy = yTmp;
             this.fx = xTmp;
             this.radSnake += 5;
+            console.log('nom');
 
             return;
         }
@@ -189,7 +198,7 @@ Snake.prototype.bindEventListeners = function () {
     };
 };
 
-window.addEventListener('DOMContentLoaded', function () {
+window.addEventListener('DOMContentLoaded', function(){
     var myGame = new Snake(document.querySelector('canvas'));    
+});
 
-})
