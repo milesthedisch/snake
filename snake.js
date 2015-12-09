@@ -72,17 +72,19 @@ Snake.prototype.drawCircle = function (centerX, centerY, radius, colour) {
 
 Snake.prototype.drawSnake = function () {
     'use strict';
-    debugger;
     this.context.fillRect(0,0, this.canvasWidth, this.canvasHeight)
 
     var _this = this;
 
     var nx = this.snake[0].x 
     var ny = this.snake[0].y
-    var nx = nx + 1 * this.canvasGridSize
+    
+    var nx = nx + this.dx * 10; 
+    var ny = ny + this.dy * 10;
 
     var tail = this.snake.pop();
     tail.x = nx
+    tail.y = ny
     this.snake.unshift(tail)
     console.log(this.snake)
 
