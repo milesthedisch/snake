@@ -86,7 +86,6 @@ Snake.prototype.drawSnake = function () {
     tail.x = nx
     tail.y = ny
     this.snake.unshift(tail)
-    console.log(this.snake)
 
     this.snake.forEach(function(s){
         _this.context.fillStyle = 'green'
@@ -117,11 +116,22 @@ Snake.prototype.draw = function () {
 
 Snake.prototype.update = function () {
     'use strict';
-
+    var head = this.snake[0]
     // X and y are bound by the canavs height and width.
     // edge collition detection.
 
-    if (this.x < (0 + this.radSnake) || this.y < (0 + this.radSnake) || this.x > (this.canvasWidth - this.radSnake) || this.y > (this.canvasHeight - this.radSnake))  {
+    if (this.x < (0 + this.radSnake) ||
+        this.y < (0 + this.radSnake) || 
+        this.x > (this.canvasWidth - this.radSnake) || 
+        this.y > (this.canvasHeight - this.radSnake)) {
+        this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+        return true;
+    }
+
+    if (head.x < 0 || 
+        head.y < 0 || 
+        head.x > this.canvasWidth ||
+        head.y > this.canvasHeight) {
         this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
         return true;
     }
@@ -195,23 +205,23 @@ Snake.prototype.bindEventListeners = function () {
 
         var key = String.fromCharCode(e.keyCode);
 
-        switch (key) {
-            case 'w': {
+        switch (true) {
+            case ('w' === key && _this.dy != -1): {
                 _this.movement(0, -1);
                 break;
             }
 
-            case 'a': {
+            case ('a' === key && _this.dx != 1): {
                 _this.movement(-1, 0);
                 break;
             }
 
-            case 's': {
+            case ('s' === key && _this.dy != 1): {
                 _this.movement(0, 1);
                 break;
             }
 
-            case 'd': {
+            case ('d' === key && _this.dx != -1): {
                 _this.movement(1, 0);
                 break;
             }
