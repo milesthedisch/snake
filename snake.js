@@ -19,14 +19,17 @@ var Snake = function (canvas) {
 
     this.snake = [];
 
-    window.thing = this.canvas;
-
     // Call init
     this.init();
 };
 
 Snake.prototype.init = function () {
     'use strict';
+    var length = 5;     
+    for (var i = length - 1; i >= 0; i--) {
+        this.snake.push({x: i * this.canvasGridSize, y: 0})
+    }
+
     this.bindEventListeners();
     this.animate()
 };
@@ -73,19 +76,15 @@ Snake.prototype.drawSnake = function () {
     this.context.fillRect(0,0, this.canvasWidth, this.canvasHeight)
 
     var _this = this;
-    var length = 5;     
-
-    for (var i = length - 1; i >= 0; i--) {
-        this.snake.push({x: i * this.canvasGridSize, y: 0})
-    }
 
     var nx = this.snake[0].x 
     var ny = this.snake[0].y
     var nx = nx + 1 * this.canvasGridSize
 
     var tail = this.snake.pop();
-        tail.x = nx
+    tail.x = nx
     this.snake.unshift(tail)
+    console.log(this.snake)
 
     this.snake.forEach(function(s){
         _this.context.fillStyle = 'green'
@@ -124,9 +123,6 @@ Snake.prototype.update = function () {
         this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
         return true;
     }
-
-
-   
 
     this.x += this.dx
     this.y += this.dy
