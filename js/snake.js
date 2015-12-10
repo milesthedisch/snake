@@ -2,24 +2,21 @@
 
 var Snake = function (canvas, gridSize, options) {
     'use strict';
-    
+
     // canvas
     this.debug = true;
     this.canvas = canvas;
-    this.options = options || 'circle'
+    this.options = options || 'snake'
     this.context = this.canvas.getContext('2d');    
-    this.canvasWidth = this.canvas.offsetWidth;
-    this.canvasHeight = this.canvas.offsetHeight;
-    this.canvasGridSize = gridSize || 5;
+    this.canvasWidth = 50;
+    this.canvasHeight = 50;
+    this.rendererHeight = this.canvas.offsetWidth;
+    this.rendererWidth = this.canvas.offsetHeight;
+    this.ratioWidth = this.rendererWidth / this.canvasWidth;
+    this.ratioHeight = this.rendererHeight / this.canvasHeight;
+    this.canvasGridSize = gridSize || 10;
+    console.log(this.ratioWidth)
 
-    // poistional values
-    this.x = 2
-    this.y = 0 
-    this.dx = 0
-    this.dy = 1
-    this.fx = utils.randPos(0, 63)
-    this.fy = utils.randPos(0, 63)
-    
     // If i want circles
     if (this.options === 'circle') {
         this.radSnake = 5;
@@ -28,9 +25,16 @@ var Snake = function (canvas, gridSize, options) {
     // If i want snakes
     if (this.options === 'snake') {
         this.snake = [];    
-        this.head = this.snake[0];
     }
 
+    // poistional values
+    // this.x = 2
+    // this.y = 0 
+    this.dx = 0 
+    this.dy = 1 
+    this.fx = utils.randPos(0, this.canvasWidth - 1)
+    this.fy = utils.randPos(0, this.canvasHeight - 1)
+    
     // initiate everything;
     this.init();
 }
@@ -39,12 +43,12 @@ Snake.prototype.createSnake = function (length) {
     'use strict'
     for (var i = length - 1; i >= 0; i--) {
         this.snake.push({x: i, y: 0})
-    }
+    }    
 }
 
 Snake.prototype.init = function () {
     'use strict';
-    this.createSnake(5);
+    this.createSnake(10);
     this.bindEventListeners();
     this.tick();
     this.animate();
@@ -52,23 +56,25 @@ Snake.prototype.init = function () {
 
 Snake.prototype.tick = function () {
     'use strict'
-    update();   
-    setTimeout(tick, 100);
-}
-
-Snake.prototype.animate = function () {
-    'use strict';
     var _this = this;
-    this.ref = window.requestAnimationFrame(_this.animate.bind(_this))
-
-    // utils.debug(this.drawGridLines) 
+    this.timeout = setTimeout(_this.tick.bind(_this), 100)
+    this.update();  
 }
 
 Snake.prototype.update = function () {
     'use strict'
+    var _this = this
 
-    this.x += this.dx
-    this.y += this.dy
+    var nx = this.snake[0].x 
+    var ny = this.snake[0].y
+
+    nx += this.dx 
+    ny += this.dy
+
+    var tail = this.snake.pop();
+        tail.x = nx
+        tail.y = ny
+    this.snake.unshift(tail)
 
     this.eat(this.collision(this.options))
 }
@@ -79,11 +85,44 @@ Snake.prototype.movement = function (directionX, directionY) {
     this.dx = directionX
     this.dy = directionY
 
-    if (this.debug) {
-        this.update();
-        this.draw();
-    }
+    // if (this.debug) {
+    //     this.update();
+    //     this.context.clearRect(0, 0, this.rendererWidth,this.rendererHeight);
+    //     this.context.fillStyle = '#ffffff';
+    //     // Drawing snake //
+    //     this.drawSnake()
+    // }
 }
+
+Snake.prototype.animate = function () {
+    'use strict'
+    this.draw();
+    this.ref = window.requestAnimationFrame(this.animate.bind(this))
+}
+
+Snake.prototype.draw = function () {
+    'use strict';
+    var _this = this;
+
+    //clear every frame
+    this.context.clearRect(0, 0, this.rendererWidth,this.rendererHeight);
+
+    this.context.fillStyle = '#ffffff';
+
+    // Drawing snake //
+    this.drawSnake()
+
+    // Drawing Grid //
+    this.drawGridLines(this.canvasWidth, this.canvasHeight, this.canvasGridSize)
+
+    // Draw food //
+    this.context.fillStyle = 'red'
+    this.context.fillRect(this.fx * this.ratioWidth, this.fy * this.ratioHeight, this.ratioWidth, this.ratioHeight);
+    // Draw moving circles //
+    // this.drawCircle(this.x, this.y, this.radSnake, "skyblue");
+    // this.drawCircle(this.fx, this.fy, this.radius, "red");
+    // this.ref = window.requestAnimationFrame(this.draw.bind(this))
+};
 
 Snake.prototype.eat = function (check) {
     'use strict'
@@ -105,16 +144,13 @@ Snake.prototype.eat = function (check) {
  //    }
 
     if (check) {
-        var yTmp = this.randPos(0, 63)
-        var xTmp = this.randPos(0, 63)
+        var yTmp = utils.randPos(0, this.canvasHeight - 1)
+        var xTmp = utils.randPos(0, this.canvasWidth - 1)
         var checker = this.snake.every(function(element){
-            console.log('yum')
             return (xTmp != element.x && yTmp != element.y) 
         })
-        
         if (checker && check) {
-            this.snake[0].x = this.fy;
-            this.snake[0].y = this.fx;
+            this.snake.push({x: this.fx, y: this.fy})
             this.fy = yTmp;
             this.fx = xTmp;
             console.log('yum')
@@ -126,20 +162,35 @@ Snake.prototype.eat = function (check) {
 }
 Snake.prototype.collision = function (options) {
     'use strict';
+    var _this = this;
     switch (options) {
         case "snake" : {
-
+            console.log('collision detection')
             // For wall collision
-            if (this.head.x < 0 || 
-                this.head.y < 0 || 
-                this.head.x > this.canvasWidth ||
-                this.head.y > this.canvasHeight) 
-            {
-                this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-                window.cancelAnimationFrame(this.ref)
+            if (this.snake[0].x < 0 || 
+                this.snake[0].y < 0 || 
+                this.snake[0].x > this.canvasWidth - 1||
+                this.snake[0].y > this.canvasHeight - 1) 
+            {   
+
+                this.dx = 0
+                this.dy = 0
+                clearTimeout(this.timeout)
+                this.cancel = window.cancelAnimationFrame(this.ref);
+                
             }
 
+            _this.snake.forEach(function(s, i){
+                if ( i != 0 ) {
+                    if (s.x === _this.snake[0].x && s.y === _this.snake[0].y ) {
+                        _this.cancel = window.cancelAnimationFrame(_this.ref);
+                        clearTimeout(_this.timeout)
+                    }      
+                }
+            })
+
             // For food collision
+            console.log('x: ',this.snake[0].x, 'y: ', this.snake[0].y, 'fx:', this.fx, 'fy: ', this.fy)
             if ( this.snake[0].x === this.fx && this.snake[0].y === this.fy) {
                 return true;
             } else {
@@ -176,12 +227,12 @@ Snake.prototype.collision = function (options) {
 
 Snake.prototype.drawGridLines = function () {
     'use strict';
-    if (this.debug) {
+    if (!this.debug) {
         // Horizontal Lines 
-        for (var i = 0; i < Math.round(this.canvasWidth / this.canvasGridSize); i++) {
+        for (var i = 0; i < this.canvasWidth; i++) {
             this.context.beginPath();
-            this.context.moveTo(0, (i * this.canvasGridSize));
-            this.context.lineTo(this.canvasWidth, i * this.canvasGridSize);
+            this.context.moveTo(0, i);
+            this.context.lineTo(this.canvasWidth, i);
             this.context.closePath();
             this.context.stroke();
          }
@@ -195,6 +246,26 @@ Snake.prototype.drawGridLines = function () {
         }
     }
 };
+
+Snake.prototype.drawCircle = function (centerX, centerY, radius, colour) {
+    'use strict';
+
+    this.context.beginPath();
+    this.context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+    this.context.fillStyle = colour;
+    this.context.fill();
+};
+
+Snake.prototype.drawSnake = function () {
+    'use strict';
+    var _this = this
+
+    this.snake.forEach(function(s){
+        _this.context.fillStyle = 'green'
+        _this.context.fillRect(s.x * _this.ratioWidth, s.y * _this.ratioHeight, _this.ratioWidth, _this.ratioHeight)     
+    })
+}
+
 
 Snake.prototype.bindEventListeners = function () {
     'use strict';
@@ -235,7 +306,7 @@ Snake.prototype.bindEventListeners = function () {
 // var Snake = function (canvas, gridSize, options)
 
 window.addEventListener('DOMContentLoaded', function(){
-    var myGame = new Snake(document.querySelector('canvas', 5, 'snake'));    
+    var myGame = new Snake(document.querySelector('canvas'));    
 });
 
 
