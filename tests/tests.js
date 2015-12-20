@@ -4,6 +4,4 @@
 // The snakes head should merge into one pixel.
 
 
-var Tests = Object.create(Snake);
-
 

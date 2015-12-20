@@ -1,15 +1,16 @@
 // var utils = module.import('utils.js') // need browserify
 
-var Snake = function (canvas, gridSize, options) {
+var Snake = function (canvas, gridSize, options, test) {
     'use strict';
 
     // canvas
-    this.debug = false;
+    this.test = test || false;
+    this.debug = true;
     this.canvas = canvas;
-    this.options = options || 'snake'
+    this.options = options || 'snake';
     this.context = this.canvas.getContext('2d');    
-    this.canvasWidth = 100;
-    this.canvasHeight = 100;
+    this.canvasWidth = 20;
+    this.canvasHeight = 20;
     this.rendererHeight = this.canvas.offsetWidth;
     this.rendererWidth = this.canvas.offsetHeight;
     this.ratioWidth = this.rendererWidth / this.canvasWidth;
@@ -26,119 +27,126 @@ var Snake = function (canvas, gridSize, options) {
         this.snake = [];    
         this.snake2 = [];
     }
+    // Position of food
+    this.fx = 0;
+    this.fy = 0;
     // scores in coonsole
     this.score = 0;
     this.score2 = 0;
     // poistional values
-    this.dx = 0 
-    this.dy = 1   
+    this.dx = 0;
+    this.dy = 1;   
     // snake 2
-    this.ax = 0
-    this.ay = 1 
+    this.ax = 0;
+    this.ay = 1; 
     // initiate everything;
     this.init();
-}
+};
 
-Snake.prototype.createSnake = function (length) {
-    'use strict'
+Snake.prototype.createSnake = function (length, x, y, x2, y2) {
+    'use strict';
+
     for (var i = length - 1; i >= 0; i--) {
-        this.snake.push({x: i, y: 0})
+        this.snake.push({x: x + i, y: y});
     }    
 
     for (var j = length - 1; j >= 0; j--) {
-        this.snake2.push({x: j + this.canvasWidth - length, y: 0})
+        this.snake2.push({x: j + this.canvasWidth - length - x, y: y2});
     }
-}
+};
 
 Snake.prototype.food = function () {
-    'use strict'
-    var _this = this
-    this.fx = utils.randPos(0, this.canvasWidth - 1)
-    this.fy = utils.randPos(0, this.canvasHeight - 1)
+    'use strict';
+    var _this = this;
+    this.fx = utils.randPos(0, this.canvasWidth - 1);
+    this.fy = utils.randPos(0, this.canvasHeight - 1);
 
     var checker = this.snake.every(function(element){
-        return (_this.fx != element.x && _this.fy != element.y) 
+        return (_this.fx != element.x && _this.fy != element.y);
     });
 
     while (!checker) {
-        this.fx = utils.randPos(0, this.canvasWidth - 1)
-        this.fy = utils.randPos(0, this.canvasHeight - 1)
+        this.fx = utils.randPos(0, this.canvasWidth - 1);
+        this.fy = utils.randPos(0, this.canvasHeight - 1);
         checker = this.snake.every(function(element){
-            return (_this.fx != element.x && _this.fy != element.y) 
+            return (_this.fx != element.x && _this.fy != element.y);
         });
         return;
     }
 
-}
+};
 
 Snake.prototype.init = function () {
     'use strict';
-    this.createSnake(10);
-    this.food();
-    this.bindEventListeners();
-    this.tick();
-    this.animate();
-}
+    if (this.test) {
+        this.headOnCollision(1, 0, 5, this.canvasWidth / 2);
+    } else {
+        this.createSnake(10);
+        this.food();
+        this.bindEventListeners();
+        this.tick(1000);
+        this.animate();
+    }
+};
 
-Snake.prototype.tick = function () {
-    'use strict'
-    var _this = this;
-    this.timeout = setTimeout(_this.tick.bind(_this), 100)
+Snake.prototype.tick = function (delay) {
+    'use strict';
+    this.timeout = setTimeout(this.tick.bind(this, delay), delay);
     this.update();  
-}
+};
 
 Snake.prototype.update = function () {
-    'use strict'
-    var _this = this
+    'use strict';
+    var _this = this;
 
-    var nx = this.snake[0].x 
-    var ny = this.snake[0].y
+    var nx = this.snake[0].x; 
+    var ny = this.snake[0].y;
 
-    var bx = this.snake2[0].x
-    var by = this.snake2[0].y
+    var bx = this.snake2[0].x;
+    var by = this.snake2[0].y;
 
-    nx += this.dx 
-    ny += this.dy
+    nx += this.dx;
+    ny += this.dy;
 
-    bx += this.ax
-    by += this.ay
+    bx += this.ax;
+    by += this.ay;
 
     var tail = this.snake.pop();
-        tail.x = nx
-        tail.y = ny
-    this.snake.unshift(tail)
+        tail.x = nx;
+        tail.y = ny;
+    this.snake.unshift(tail);
 
     var tail2 = this.snake2.pop();
-        tail2.x = bx
-        tail2.y = by
-    this.snake2.unshift(tail2)
+        tail2.x = bx;
+        tail2.y = by;
+    this.snake2.unshift(tail2);
 
-    this.eat(this.collision(this.options))
-}
+    this.eat(this.collision(this.options));
+   
+};
 
 Snake.prototype.movement = function (directionX, directionY, player) {
-    'use strict'
+    'use strict';
 
-    player = player || 1
+    player = player || 1;
 
     if (player === 1) {
-        this.dx = directionX
-        this.dy = directionY
+        this.dx = directionX;
+        this.dy = directionY;
     }
 
     if (player === 2) {
-        this.ax = directionX
-        this.ay = directionY
+        this.ax = directionX;
+        this.ay = directionY;
     }
         
     if (this.debug) {
         this.update();
         this.context.clearRect(0, 0, this.rendererWidth,this.rendererHeight);
         this.context.fillStyle = '#ffffff';
-        // Drawing snake //
         this.draw();
     }
-}
+};
 
 Snake.prototype.animate = function () {
     'use strict';
@@ -149,7 +157,6 @@ Snake.prototype.animate = function () {
 Snake.prototype.draw = function () {
     'use strict';
     var _this = this;
-
     //clear every frame
     this.context.clearRect(0, 0, this.rendererWidth,this.rendererHeight);
 
@@ -200,46 +207,41 @@ Snake.prototype.collision = function (options) {
                 this.snake2[0].x > this.canvasWidth - 1||
                 this.snake2[0].y > this.canvasHeight - 1 ) 
             {   
-
-                this.dx = 0;
-                this.dy = 0;
-                this.ax = 0;
-                this.ay = 0;
-                clearTimeout(this.timeout)
+                clearTimeout(this.timeout);
                 this.cancel = window.cancelAnimationFrame(this.ref);
-                
             }
 
             _this.snake.forEach(function(s, i){
                 _this.snake2.every(function(a, j){
                     if ( a.x === s.x && a.y === s.y ){
-                        clearTimeout(_this.timeout)
+                        console.log('hit snake 2')
+                        clearTimeout(_this.timeout);
                         _this.cancel = window.cancelAnimationFrame(_this.ref);
                     }
-                })
-                if ( i != 0 ) {
+                });
+                if ( i !== 0 ) {
                     if (s.x === _this.snake[0].x && s.y === _this.snake[0].y ) {
                         _this.cancel = window.cancelAnimationFrame(_this.ref);
-                        clearTimeout(_this.timeout)
+                        clearTimeout(_this.timeout);
                     }      
                 }
-            })
+            });
 
             _this.snake2.forEach(function(s, i){
                 // check every part except the head
                 _this.snake.every(function(a, j){
                     if ( a.x === s.x && a.y === s.y ){
-                        clearTimeout(_this.timeout)
+                        clearTimeout(_this.timeout);
                         _this.cancel = window.cancelAnimationFrame(_this.ref);
                     }
-                })
-                if ( i != 0 ) {
+                });
+                if ( i !== 0 ) {
                     if (s.x === _this.snake2[0].x && s.y === _this.snake2[0].y ) {
                         _this.cancel = window.cancelAnimationFrame(_this.ref);
-                        clearTimeout(_this.timeout)
+                        clearTimeout(_this.timeout);
                     }      
                 }
-            })
+            });
 
             // For food collision
             if ( this.snake[0].x === this.fx && this.snake[0].y === this.fy) {
@@ -276,7 +278,7 @@ Snake.prototype.collision = function (options) {
             break;
         }
     }
-}
+};
 
 Snake.prototype.drawGridLines = function () {
     'use strict';
@@ -311,18 +313,18 @@ Snake.prototype.drawCircle = function (centerX, centerY, radius, colour) {
 
 Snake.prototype.drawSnake = function () {
     'use strict';
-    var _this = this
+    var _this = this;
 
     this.snake.forEach(function(s){
-        _this.context.fillStyle = 'green'
-        _this.context.fillRect(s.x * _this.ratioWidth, s.y * _this.ratioHeight, _this.ratioWidth, _this.ratioHeight)     
-    })
+        _this.context.fillStyle = 'green';
+        _this.context.fillRect(s.x * _this.ratioWidth, s.y * _this.ratioHeight, _this.ratioWidth, _this.ratioHeight);    
+    });
 
     this.snake2.forEach(function(s){
-        _this.context.fillStyle = 'brown'
-        _this.context.fillRect(s.x * _this.ratioWidth, s.y * _this.ratioHeight, _this.ratioWidth, _this.ratioHeight)
-    })
-}
+        _this.context.fillStyle = 'brown';
+        _this.context.fillRect(s.x * _this.ratioWidth, s.y * _this.ratioHeight, _this.ratioWidth, _this.ratioHeight);
+    });
+};
 
 
 Snake.prototype.bindEventListeners = function () {
@@ -355,7 +357,7 @@ Snake.prototype.bindEventListeners = function () {
             }  
             // This is for the second player
             case ('right' === key && _this.ax != -1): {
-                _this.movement(1, 0, 2)
+                _this.movement(1, 0, 2);
                 break;
             }
 
@@ -365,21 +367,35 @@ Snake.prototype.bindEventListeners = function () {
             } 
 
             case ('left' === key && _this.ax != 1): {
-                _this.movement(-1, 0, 2)
+                _this.movement(-1, 0, 2);
                 break;
             }
 
             case ('up' === key && _this.ay != 1): {
-                _this.movement(0, -1, 2)
+                _this.movement(0, -1, 2);
                 break;
             }
         }
     };
 };
 
+Snake.prototype.headOnCollision = function (directionX, directionY, x, y ) {
+    
+    this.dx = directionX;
+    this.dy = this.directionY || 0;
+
+    this.ax = -(directionX);
+    this.ay = this.directionY || 0;
+
+    this.createSnake(1, x, y, x, y);
+
+    this.tick(1000);
+    this.animate();
+};
+
 // var Snake = function (canvas, gridSize, options)
 window.addEventListener('DOMContentLoaded', function(){
-    var myGame = new Snake(document.querySelector('canvas'));    
+    var myGame = new Snake(document.querySelector('canvas'), null, null, true); 
 });
 
 
