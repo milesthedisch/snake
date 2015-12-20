@@ -26,13 +26,13 @@ var Snake = function (canvas, gridSize, options) {
         this.snake = [];    
         this.snake2 = [];
     }
-
+    // scores in coonsole
     this.score = 0;
     this.score2 = 0;
     // poistional values
     this.dx = 0 
     this.dy = 1   
-
+    // snake 2
     this.ax = 0
     this.ay = 1 
     // initiate everything;
@@ -141,10 +141,10 @@ Snake.prototype.movement = function (directionX, directionY, player) {
 }
 
 Snake.prototype.animate = function () {
-    'use strict'
+    'use strict';
     this.draw();
-    this.ref = window.requestAnimationFrame(this.animate.bind(this))
-}
+    this.ref = window.requestAnimationFrame(this.animate.bind(this));
+};
 
 Snake.prototype.draw = function () {
     'use strict';
@@ -156,13 +156,13 @@ Snake.prototype.draw = function () {
     this.context.fillStyle = '#ffffff';
 
     // Drawing snake //
-    this.drawSnake()
+    this.drawSnake();
 
     // Drawing Grid //
-    this.drawGridLines(this.canvasWidth, this.canvasHeight, this.canvasGridSize)
+    this.drawGridLines(this.canvasWidth, this.canvasHeight, this.canvasGridSize);
 
     // Draw food //
-    this.context.fillStyle = 'red'
+    this.context.fillStyle = 'red';
     this.context.fillRect(this.fx * this.ratioWidth, this.fy * this.ratioHeight, this.ratioWidth, this.ratioHeight);
     // Draw moving circles //
     // this.drawCircle(this.x, this.y, this.radSnake, "skyblue");
@@ -171,19 +171,19 @@ Snake.prototype.draw = function () {
 };
 
 Snake.prototype.eat = function (check) {
-    'use strict'
+    'use strict';
         if (check) {
             this.snake.push({x: this.fx, y: this.fy});
             this.food();
-            this.score++
+            this.score++;
             console.log('score: ', this.score);
         }  else if (check === 'snake2') {
-            this.snake.push({x: this.fx, y: this.fy});
+            this.snake2.push({x: this.fx, y: this.fy});
             this.food();
-            this.score2++
+            this.score2++;
             console.log('score: ', this.score);
         }
-}
+};
 
 Snake.prototype.collision = function (options) {
     'use strict';
@@ -201,10 +201,10 @@ Snake.prototype.collision = function (options) {
                 this.snake2[0].y > this.canvasHeight - 1 ) 
             {   
 
-                this.dx = 0
-                this.dy = 0
-                this.ax = 0
-                this.ay = 0
+                this.dx = 0;
+                this.dy = 0;
+                this.ax = 0;
+                this.ay = 0;
                 clearTimeout(this.timeout)
                 this.cancel = window.cancelAnimationFrame(this.ref);
                 
@@ -369,7 +369,7 @@ Snake.prototype.bindEventListeners = function () {
                 break;
             }
 
-            case ('up' === key && _this.ay != -1): {
+            case ('up' === key && _this.ay != 1): {
                 _this.movement(0, -1, 2)
                 break;
             }
