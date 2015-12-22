@@ -20,7 +20,7 @@ var utils = {
     		}
     	}
 
-        return (String.fromCharCode(e.keyCode)).toLowerCase();;
+        return (String.fromCharCode(e.keyCode)).toLowerCase();
     },
 
     'randPos' : function (min, max) {
