@@ -1,24 +1,26 @@
-var utils = {
+var utils = (function IIFE() {
+
+    var publicAPI = {
     
     'keyPress' : function (e) {
-    	switch (e.keyCode) {
-    		case 37: {
-    			return 'left'
-    			break;
-    		}
-    		case 38: {
-    			return 'up'
-    			break;
-    		} 
-    		case 39: { 
-    			return 'right'
-    			break;
-    		}
-    		case 40: {
-    			return 'down'
-    			break;
-    		}
-    	}
+        switch (e.keyCode) {
+            case 37: {
+                return 'left';
+                break;
+            }
+            case 38: {
+                return 'up';
+                break;
+            } 
+            case 39: { 
+                return 'right';
+                break;
+            }
+            case 40: {
+                return 'down';
+                break;
+            }
+        }
 
         return (String.fromCharCode(e.keyCode)).toLowerCase();
     },
@@ -29,4 +31,7 @@ var utils = {
         }
     }
 
-}
+    };
+
+    return publicAPI;
+})();
