@@ -1,48 +1,43 @@
-var Game = function (canvas, options, debug, test) {
+var Game = function (canvas, debug, test, players, food) {
     'use strict';
 
     this.gameflag = null;    
-
-    this.test = test || false;
     this.debug = debug || false;
 
-    // canvas
+    this.objects = {
+        "players" : players || [],
+        "food" : food || []
+    };
+    // Canvas
     this.canvas = canvas;
-    this.options = options || 'snake';
     this.context = this.canvas.getContext('2d');    
     this.canvasWidth = 40;
     this.canvasHeight = 40;
     this.rendererHeight = this.canvas.offsetWidth;
     this.rendererWidth = this.canvas.offsetHeight;
+
+    // Ratio for renderer and canvas 
     this.ratioWidth = this.rendererWidth / this.canvasWidth;
     this.ratioHeight = this.rendererHeight / this.canvasHeight;
-    this.players = [];
 };
 
-Game.prototype.init = function (player1, mice) {
+Game.prototype.init = function () {
     'use strict';
-    this.food = mice;
-
-    if (this.test) {
-        // this.headOnCollision(1, 0, 5, this.canvasWidth / 2);
-        this.wallCollision(-1, 0, 5, this.canvasWidth / 2);
-        // this.nearMiss(9, 9);
-    } else {
-        this.players.push(player1);
-        this.food.smartSpawn(this, this.players);
-        // For now just have one player later add an array;
-        player1.bindEventListeners();
-        this.tick(100);
-        this.animate();
-    }
+    this.objects['players'][0].init();
+    this.objects['food'].smartSpawn(this, this.objects['players']);
+     // !! For now just have one player later add an array and loops;
+    this.objects['players'][0].bindEventListeners();
+    this.tick(50);
+    this.animate();
 };
 
-Game.prototype.gameOver = function () {
+Game.prototype.gameOver = function (deadPlayer) {
     this.gameflag = true;
     clearTimeout(this.timeout);
     window.cancelAnimationFrame(this.ref);
-    this.draw('dead');
-    this.drawGridLines();
+    this.lastFrame();
+    console.log(this.objects["players"][deadPlayer])
+    this.draw();
 };
 
 Game.prototype.drawGridLines = function () {
@@ -56,7 +51,6 @@ Game.prototype.drawGridLines = function () {
             this.context.closePath();
             this.context.stroke();
          }
-
         // Vertical lines
         for (var j = 0; j < this.rendererHeight; j = j + this.ratioHeight) {
             this.context.beginPath();
@@ -79,34 +73,25 @@ Game.prototype.draw = function (dead) {
     var _this = this;
     //clear every frame
     this.context.clearRect(0, 0, this.rendererWidth,this.rendererHeight);
-
     this.context.fillStyle = '#ffffff';
-
     // Drawing snake //
-    if (dead === "dead"){
-        this.drawSnakes('#777777',"dead");
-    } else {
-        this.drawSnakes();    
-    }
-
+    this.drawSnakes();    
     // Drawing Grid //
     this.drawGridLines();
-
     // Draw food //
     this.context.fillStyle = 'red';
-    this.context.fillRect(this.food.x * this.ratioWidth, this.food.y * this.ratioHeight, this.ratioWidth, this.ratioHeight);
-   
+    this.context.fillRect(this.objects['food'].x * this.ratioWidth, this.objects['food'].y * this.ratioHeight, this.ratioWidth, this.ratioHeight);
 };
 
 Game.prototype.drawSnakes = function (color) {
     'use strict';
     var _this = this;
-        this.players.forEach(function(player){
-            player.positions.forEach(function(s){
-                _this.context.fillStyle = color || 'green';
-                _this.context.fillRect(s.x * _this.ratioWidth, s.y * _this.ratioHeight, _this.ratioWidth, _this.ratioHeight);    
-            });
-        })
+    this.objects['players'].forEach(function(player){
+        player.positions.forEach(function(s){
+            _this.context.fillStyle = color || 'green';
+            _this.context.fillRect(s.x * _this.ratioWidth, s.y * _this.ratioHeight, _this.ratioWidth, _this.ratioHeight);    
+        });
+    });
 };
 
 Game.prototype.tick = function (delay) {
@@ -119,21 +104,19 @@ Game.prototype.tick = function (delay) {
 
 Game.prototype.update = function (dead) {
     'use strict';
-    this.players.forEach(function(player){
-
+    var that = this;
+    this.objects['players'].forEach(function(player){
         player.nx = player.positions[0].x;
         player.ny = player.positions[0].y;
-
         player.nx += player.dx;
         player.ny += player.dy;
-
         player.tail = player.positions.pop();
         player.tail.x = player.nx;
         player.tail.y = player.ny;
-
         player.positions.unshift(player.tail);
-
     })
+
+    map.collision(this);
 
     if (this.debug) {
         this.update();
@@ -142,3 +125,15 @@ Game.prototype.update = function (dead) {
         this.draw();
     }
 };
+
+Game.prototype.lastFrame = function () {
+    this.objects['players'].forEach(function(player){
+        debugger;
+        var tail = player.positions.length - 2
+        // players head should be one behind the players tail;
+        head = player.positions.shift();
+        head.x = player.positions[tail].x + (-(player.dx))
+        head.y = player.positions[tail].y + (-(player.dy))
+        player.positions.push(head)
+    })
+}
