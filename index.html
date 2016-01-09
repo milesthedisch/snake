@@ -3,8 +3,11 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Document</title>
+	<script src='bower_components/underscore/underscore.js'></script>
 	<script src="js/utils.js"></script>
-	<script src="js/snake.js"></script>
+	<script src="js/Game.js"></script>
+	<script src="js/Item.js"></script>	
+	<script src="js/Snake.js"></script>
 	<script src="tests/tests.js"></script>
 	<style>
 		* {box-sizing: border-box;}
@@ -15,8 +18,16 @@
 	</style>
 </head>
 <body>
-
 	 <canvas id="canvas" width="500" height="500">
+	 <script>
+	 	window.addEventListener('DOMContentLoaded', function(){
+		    var myGame = new Game(document.querySelector('canvas'), null, null, false);
+		    var player1 = new Snake();
+		    var mice = new Food();
 
+		    player1.init();
+		    myGame.init(player1, mice);
+		});
+	 </script>
 </body>
 </html>
