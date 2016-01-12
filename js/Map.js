@@ -2,21 +2,23 @@ var map = (function () {
     var publicAPI = {
         'collision': function (game, coordinates) {
             'use strict';
-            if (this.gameflag) {return;}
             // For wall collision
             var playerAmount = game.objects["players"].length
             var playerArray = game.objects["players"]
             var i = 0
-
-            for (i; i < playerAmount; i++) {
-                if ( playerArray[i].nx < 0 ||
-                     playerArray[i].ny < 0 || 
-                     playerArray[i].nx > game.canvasWidth - 1 ||
-                     playerArray[i].ny > game.canvasHeight - 1 ) 
-                {
-                    game.gameOver(i);
+                for (i; i < playerAmount; i++) {
+                    if (playerArray[i].state.dead !== true)   
+                        if ( playerArray[i].x < 0 ||
+                             playerArray[i].y < 0 || 
+                             playerArray[i].x > game.canvasWidth - 1 ||
+                             playerArray[i].y > game.canvasHeight - 1 ) 
+                        {
+                            console.log('hit map', i)
+                            debugger;      
+                            playerArray[i].stop();
+                        }
                 }
-            }
+        }
     }
         // _this.snake.forEach(function(s, i){
                     // check for head on collision
@@ -126,7 +128,7 @@ var map = (function () {
             //     break;
             // }
         // }
-    };
+    // };
 
     // var map = {
     //     'map': {
