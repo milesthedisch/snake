@@ -46,7 +46,8 @@ Snake.prototype.stop = function (game){
     this.state = {
         'dead': true
     }
-    this.positions = this.lastPos
+    this.positions.splice(0);
+    this.positions = this.lastPos;
     this.dx = null;
     this.dy = null;
 }
