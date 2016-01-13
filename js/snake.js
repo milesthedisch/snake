@@ -1,5 +1,3 @@
-// var utils = module.import('utils.js') // need browserify
-
 var Snake = function() {
     'use strict';
     // If i want snakes
@@ -46,7 +44,9 @@ Snake.prototype.stop = function (game){
     this.state = {
         'dead': true
     }
+    // Deleted exsiting positions
     this.positions.splice(0);
+    // Store last frames positions in positions
     this.positions = this.lastPos;
     this.dx = null;
     this.dy = null;
@@ -67,7 +67,9 @@ Snake.prototype.update = function (player) {
         if (this.state['dead'] === true) {
             return;
         }
+        // Last frame
         this.last();
+
         this.x = this.positions[0].x;
         this.y = this.positions[0].y;
         this.x += this.dx;
@@ -76,6 +78,8 @@ Snake.prototype.update = function (player) {
         this.tail.x = this.x;
         this.tail.y = this.y;
         this.positions.unshift(this.tail);
+
+        // Next Frame
         this.next();
 };
 
@@ -89,7 +93,7 @@ Snake.prototype.next = function () {
     this.ghost = {x: this.nx, y: this.ny};
 }
 
-Snake.prototype.bindEventListeners = function () {
+Snake.prototype.bindEventListeners = function (delay) {
     'use strict';
 
     var _this = this;
@@ -117,11 +121,8 @@ Snake.prototype.bindEventListeners = function () {
                 break;
             }
         }
-    }, 50);
+    }, delay);
 };
-
-
-
 
 
 

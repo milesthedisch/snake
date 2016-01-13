@@ -4,7 +4,7 @@ var Food = function() {
     this.y = null;
 };
 
-Food.prototype.smartSpawn = function (game, players) {
+Food.prototype.init = function (game, players) {
     'use strict';
     this.spawn(game);
     var check = this.smart(players);

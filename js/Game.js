@@ -16,25 +16,20 @@ var Game = function (canvas, debug, test, players, food) {
     // Ratio for renderer and canvas 
     this.ratioWidth = this.rendererWidth / this.canvasWidth;
     this.ratioHeight = this.rendererHeight / this.canvasHeight;
+    this.delay = 100;
 };
 
 Game.prototype.init = function () {
     'use strict';
-    debugger;
+    var _this = this;
     this.objects['players'].forEach(function(player){
         player.init();
-        player.bindEventListeners();
+        player.bindEventListeners(_this.delay);
     });
-    this.objects['food'].smartSpawn(this, this.objects['players']);
-     // !! For now just have one player later add an array and loops;
-    
-    this.tick(100);
+    this.objects['food'].init(this, this.objects['players']);
+    this.tick(this.delay);
     this.animate();
 };
-
-// Game.prototype.gameOver = function (deadPlayer) {
-//     this.objects["players"][deadPlayer].stop();
-// };
 
 Game.prototype.drawGridLines = function () {
     'use strict';
@@ -83,6 +78,7 @@ Game.prototype.drawSnakes = function (color) {
     'use strict';
     var _this = this;
     this.objects['players'].forEach(function(player){
+        player.state['dead'] === true ? color = 'grey' : color = 'green'
         player.positions.forEach(function(s){
             _this.context.fillStyle = color || 'green';
             _this.context.fillRect(s.x * _this.ratioWidth, s.y * _this.ratioHeight, _this.ratioWidth, _this.ratioHeight);    
@@ -105,7 +101,3 @@ Game.prototype.update = function () {
     });
     map.collision(game);
 };
-
-Game.prototype.lastFrame = function (player) {
-    
-}

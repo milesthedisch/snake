@@ -5,6 +5,7 @@ var map = (function () {
             // For wall collision
             var playerAmount = game.objects["players"].length
             var playerArray = game.objects["players"]
+            var items = game.objects["food"]
             var i = 0
                 for (i; i < playerAmount; i++) {
                     if (playerArray[i].state.dead !== true)   
@@ -16,7 +17,10 @@ var map = (function () {
                             console.log('hit map, player:', i);
                             debugger;
                             playerArray[i].stop();
-                        }
+                        } else if ( playerArray[i].x === items.x && playerArray[i].y === item.y ) 
+                        {
+                            playerArray[i].eat();
+                        }   
                 }
         }
     }
