@@ -13,8 +13,8 @@ var map = (function () {
                              playerArray[i].x > game.canvasWidth - 1 ||
                              playerArray[i].y > game.canvasHeight - 1 ) 
                         {
-                            console.log('hit map', i)
-                            debugger;      
+                            console.log('hit map, player:', i);
+                            debugger;
                             playerArray[i].stop();
                         }
                 }

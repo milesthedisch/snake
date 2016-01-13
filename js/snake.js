@@ -18,7 +18,7 @@ var Circle = function() {
     // If i want circles
     this.x = null;
     this.y = null;
-
+    // Radius's
     this.radSnake = 5;
     this.radius = 3;    
 };
@@ -41,15 +41,14 @@ Snake.prototype.movement = function (directionX, directionY) {
     this.dy = directionY;
 };
 
-Snake.prototype.stop = function (){
+Snake.prototype.stop = function (game){
     'use strict'
     this.state = {
         'dead': true
     }
-    // this.lastFrame();
+    this.positions = this.lastPos
     this.dx = null;
     this.dy = null;
-    console.log(this.positions)
 }
 
 Snake.prototype.eat = function (check) {
@@ -63,7 +62,7 @@ Snake.prototype.eat = function (check) {
         } 
 };
 
-Snake.prototype.update = function () {  
+Snake.prototype.update = function (player) { 
         if (this.state['dead'] === true) {
             return;
         }
@@ -77,31 +76,17 @@ Snake.prototype.update = function () {
         this.tail.y = this.y;
         this.positions.unshift(this.tail);
         this.next();
-
-        console.log('last: ', this.lastPos, 'ghost: ', this.ghost, 'pos: ', this.positions)
 };
 
-Snake.prototype.lastFrame = function () {
-    var that = this;
-    this.lastPositions = this.positions;
-    this.lastPositions.forEach(function(pos){
-         pos.x += that.dx * -1;
-         pos.y += that.dy * -1;
-    })
-}
-
 Snake.prototype.last = function () {
-    this.lastPos = this.positions.slice(0);
+    this.lastPos = utils.deepCopy(this.positions);
 }
 
 Snake.prototype.next = function () {
-    debugger;
     this.nx = this.tail.x + this.dx;
     this.ny = this.tail.y + this.dy;
     this.ghost = {x: this.nx, y: this.ny};
 }
-
-
 
 Snake.prototype.bindEventListeners = function () {
     'use strict';

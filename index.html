@@ -29,12 +29,12 @@
 	</div>
 	<script>
 	 	window.addEventListener('DOMContentLoaded', function(){
-	   	    var players = [];
-	   	    for (var i = 0; i < 16; i++) {
+	   	    var players = [];	
+	   	    for (var i = 0; i < 1; i++) {
 	 			players[i] = new Snake(); 
 	   	    }	
 		    var mice = new Food();
-		    var myGame = new Game(document.querySelector('canvas'), null, false, players, mice);
+		    var myGame = new Game(document.querySelector('canvas'), true, null, players, mice);
 		    myGame.init();
 		});
 	</script>

@@ -23,10 +23,11 @@ Game.prototype.init = function () {
     debugger;
     this.objects['players'].forEach(function(player){
         player.init();
+        player.bindEventListeners();
     });
     this.objects['food'].smartSpawn(this, this.objects['players']);
      // !! For now just have one player later add an array and loops;
-    this.objects['players'][0].bindEventListeners();
+    
     this.tick(100);
     this.animate();
 };
@@ -35,27 +36,27 @@ Game.prototype.init = function () {
 //     this.objects["players"][deadPlayer].stop();
 // };
 
-// Game.prototype.drawGridLines = function () {
-//     'use strict';
-//     if (this.debug) {
-//         // Horizontal Lines 
-//         for (var i = 0; i < this.rendererWidth; i = i + this.ratioWidth) {
-//             this.context.beginPath();
-//             this.context.moveTo(0, i);
-//             this.context.lineTo(this.rendererWidth, i);
-//             this.context.closePath();
-//             this.context.stroke();
-//          }
-//         // Vertical lines
-//         for (var j = 0; j < this.rendererHeight; j = j + this.ratioHeight) {
-//             this.context.beginPath();
-//             this.context.moveTo(j, 0);
-//             this.context.lineTo(j, this.rendererHeight);
-//             this.context.closePath();
-//             this.context.stroke();
-//         }
-//     }
-// };
+Game.prototype.drawGridLines = function () {
+    'use strict';
+    if (this.debug) {
+        // Horizontal Lines 
+        for (var i = 0; i < this.rendererWidth; i = i + this.ratioWidth) {
+            this.context.beginPath();
+            this.context.moveTo(0, i);
+            this.context.lineTo(this.rendererWidth, i);
+            this.context.closePath();
+            this.context.stroke();
+         }
+        // Vertical lines
+        for (var j = 0; j < this.rendererHeight; j = j + this.ratioHeight) {
+            this.context.beginPath();
+            this.context.moveTo(j, 0);
+            this.context.lineTo(j, this.rendererHeight);
+            this.context.closePath();
+            this.context.stroke();
+        }
+    }
+};
 
 Game.prototype.animate = function () {
     'use strict';
@@ -72,7 +73,7 @@ Game.prototype.draw = function () {
     // Drawing snake //
     this.drawSnakes();    
     // Drawing Grid //
-    /* this.drawGridLines(); */
+    this.drawGridLines(); 
     // Draw food //
     this.context.fillStyle = 'red';
     this.context.fillRect(this.objects['food'].x * this.ratioWidth, this.objects['food'].y * this.ratioHeight, this.ratioWidth, this.ratioHeight);
@@ -100,8 +101,11 @@ Game.prototype.update = function () {
     'use strict';
     var game = this;
     this.objects['players'].forEach(function(player){
-        player.update();
+        player.update(player);
     });
     map.collision(game);
 };
 
+Game.prototype.lastFrame = function (player) {
+    
+}
