@@ -15,11 +15,10 @@ var map = (function () {
                              playerArray[i].y > game.canvasHeight - 1 ) 
                         {
                             console.log('hit map, player:', i);
-                            debugger;
                             playerArray[i].stop();
-                        } else if ( playerArray[i].x === items.x && playerArray[i].y === item.y ) 
+                        } else if ( playerArray[i].x === items.x && playerArray[i].y === items.y ) 
                         {
-                            playerArray[i].eat();
+                            playerArray[i].eat(game, items);
                         }   
                 }
         }

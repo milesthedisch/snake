@@ -15,8 +15,9 @@ Food.prototype.init = function (game, players) {
 };
 
 Food.prototype.spawn = function (game) {
-    this.x = utils.randPos(0, game.canvasWidth - 1);
-    this.y = utils.randPos(0, game.canvasHeight - 1);
+    var map = {x: game.canvasWidth , y: game.canvasHeight}
+    this.x = utils.randPos(0, map.x - 1);
+    this.y = utils.randPos(0, map.y - 1);
 };
 
 Food.prototype.smart = function (players) {

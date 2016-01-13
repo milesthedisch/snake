@@ -11,14 +11,12 @@ var Snake = function() {
     this.state = {'dead': false};    
 };
 
-var Circle = function() {
+Snake.prototype.eat = function (game, food) {
     'use strict';
-    // If i want circles
-    this.x = null;
-    this.y = null;
-    // Radius's
-    this.radSnake = 5;
-    this.radius = 3;    
+    debugger;
+    this.score++
+    this.positions.push({x: food.x, y: food.y});
+    food.init(game, game.objects['players']);
 };
 
 Snake.prototype.createSnake = function (length, x, y, x2, y2) {
@@ -51,17 +49,6 @@ Snake.prototype.stop = function (game){
     this.dx = null;
     this.dy = null;
 }
-
-Snake.prototype.eat = function (check) {
-    'use strict';
-        console.log(check)
-        if (check === true) {
-            this.snake.push({x: this.fx, y: this.fy});
-            this.food();
-            this.score++;
-            console.log('score: ', this.score);
-        } 
-};
 
 Snake.prototype.update = function (player) { 
         if (this.state['dead'] === true) {
