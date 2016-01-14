@@ -2,25 +2,41 @@ var map = (function () {
     var publicAPI = {
         'collision': function (game, coordinates) {
             'use strict';
-            // For wall collision
-            var playerAmount = game.objects["players"].length
-            var playerArray = game.objects["players"]
+            var playersAmount = game.objects["players"].length
+            var playersArray = game.objects["players"]
             var items = game.objects["food"]
-            var i = 0
-                for (i; i < playerAmount; i++) {
-                    if (playerArray[i].state.dead !== true)   
-                        if ( playerArray[i].x < 0 ||
-                             playerArray[i].y < 0 || 
-                             playerArray[i].x > game.canvasWidth - 1 ||
-                             playerArray[i].y > game.canvasHeight - 1 ) 
-                        {
-                            console.log('hit map, player:', i);
-                            playerArray[i].stop();
-                        } else if ( playerArray[i].x === items.x && playerArray[i].y === items.y ) 
-                        {
-                            playerArray[i].eat(game, items);
-                        }   
+            var i = 0;
+            var j = 1;
+            var k = 0;
+            for (i; i < playersAmount; i++) {
+                var playerLength = playersArray[i].positions.length
+                if (playersArray[i].state.dead !== true)   
+                    if (playersArray[i].x < 0 ||
+                        playersArray[i].y < 0 || 
+                        playersArray[i].x > game.canvasWidth - 1 ||
+                        playersArray[i].y > game.canvasHeight - 1) {
+                        console.log('hit map, players:', i);
+                        playersArray[i].stop();
+                    }
+                    else if ( playersArray[i].x === items.x && playersArray[i].y === items.y ) {
+                        playersArray[i].eat(game, items);
+                    }
+                if (playersAmount > 1) {
+                    for (k; k < playersAmount; k++){
+                        if (playersArray[i].x === playersArray[k].x) {
+                            playersArray[i].stop();
+                            playersArray[k].stop();
+                        }
+                    }
+                }    
+                for (j; j < playerLength; j++) {
+                 if (playersArray[i].state['dead'] === true) return;
+                    if (playersArray[i].x === playersArray[i].positions[j].x && playersArray[i].y === playersArray[i].positions[j].y) {
+                        debugger;
+                        playersArray[i].stop();
+                    }                                
                 }
+            }
         }
     }
         // _this.snake.forEach(function(s, i){
@@ -94,41 +110,7 @@ var map = (function () {
                 //     }
                 // });
 
-                // For food collision
-                // if ( this.snake[0].x === this.fx && this.snake[0].y === this.fy) {
-                //     console.log('yum1')
-                //     return true;
-                // // } else if (this.snake2[0].x === this.fx && this.snake2[0].y === this.fy) {
-                // //     console.log('yum2');
-                // //     return 'snake2';
-                // // } 
-                // } else {
-                //     return false;
-                // }
-
                 // break;
-            // }
-
-            // case "circle" : {
-
-            //     // For wall collision (circle)
-            //     if (this.x < (0 + this.radSnake) ||
-            //         this.y < (0 + this.radSnake) || 
-            //         this.x > (this.canvasWidth - this.radSnake) || 
-            //         this.y > (this.canvasHeight - this.radSnake)) 
-            //     {
-            //         this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-            //         return true;
-            //     }   
-
-            //     //For food collision (circle)
-            //     if (Math.pow(this.x - this.fx , 2) + Math.pow(this.y - this.fy, 2) <= Math.pow(this.radSnake + this.radius + 4, 2)) {
-            //         return true;
-            //     } else {
-            //         return false;
-            //     }
-
-            //     break;
             // }
         // }
     // };

@@ -13,7 +13,6 @@ var Snake = function() {
 
 Snake.prototype.eat = function (game, food) {
     'use strict';
-    debugger;
     this.score++
     this.positions.push({x: food.x, y: food.y});
     food.init(game, game.objects['players']);
@@ -28,7 +27,7 @@ Snake.prototype.createSnake = function (length, x, y, x2, y2) {
 
 Snake.prototype.init = function () {
     'use strict';
-    this.createSnake(4, 2, 2, 2, 2);
+    this.createSnake(6, 2, 2, 2, 2);
 };
 
 Snake.prototype.movement = function (directionX, directionY) {

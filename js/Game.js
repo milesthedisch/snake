@@ -16,7 +16,7 @@ var Game = function (canvas, debug, test, players, food) {
     // Ratio for renderer and canvas 
     this.ratioWidth = this.rendererWidth / this.canvasWidth;
     this.ratioHeight = this.rendererHeight / this.canvasHeight;
-    this.delay = 100;
+    this.delay = 1000;
 };
 
 Game.prototype.init = function () {
