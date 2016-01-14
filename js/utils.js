@@ -60,7 +60,7 @@ var utils = (function IIFE() {
         //     }
         // };
 
-    }; // pubicAPI;
+    };
 
     return publicAPI;
 })();

@@ -2,38 +2,39 @@ var map = (function () {
     var publicAPI = {
         'collision': function (game, coordinates) {
             'use strict';
-            var playersAmount = game.objects["players"].length
-            var playersArray = game.objects["players"]
+            debugger;
+            var playersArray = game.objects["players"].filter(function(players){
+                return players.state['dead'] !== true;
+            })
+            var playersAmount = playersArray.length
             var items = game.objects["food"]
             var i = 0;
             var j = 1;
             var k = 0;
             for (i; i < playersAmount; i++) {
-                var playerLength = playersArray[i].positions.length
-                if (playersArray[i].state.dead !== true)   
-                    if (playersArray[i].x < 0 ||
-                        playersArray[i].y < 0 || 
-                        playersArray[i].x > game.canvasWidth - 1 ||
-                        playersArray[i].y > game.canvasHeight - 1) {
+                var playerLength = playersArray[i].positions.length;
+                var player = playersArray[i]
+                    if (player.x < 0 ||
+                        player.y < 0 || 
+                        player.x > game.canvasWidth - 1 ||
+                        player.y > game.canvasHeight - 1) {
                         console.log('hit map, players:', i);
-                        playersArray[i].stop();
+                        player.stop();
                     }
-                    else if ( playersArray[i].x === items.x && playersArray[i].y === items.y ) {
-                        playersArray[i].eat(game, items);
+                    else if ( player.x === items.x && player.y === items.y ) {
+                        player.eat(game, items);
                     }
-                if (playersAmount > 1) {
-                    for (k; k < playersAmount; k++){
-                        if (playersArray[i].x === playersArray[k].x) {
-                            playersArray[i].stop();
-                            playersArray[k].stop();
-                        }
-                    }
-                }    
+                // if (playersAmount > 1) {
+                //     for (k; k < playersAmount; k++){
+                //         if (player.x === playersArray[k].x) {
+                //             player.stop();
+                //             playersArray[k].stop();
+                //         }
+                //     }
+                // }    
                 for (j; j < playerLength; j++) {
-                 if (playersArray[i].state['dead'] === true) return;
-                    if (playersArray[i].x === playersArray[i].positions[j].x && playersArray[i].y === playersArray[i].positions[j].y) {
-                        debugger;
-                        playersArray[i].stop();
+                    if (player.tail.x === player.positions[j].x && player.tail.y === player.positions[j].y) {
+                        player.stop();
                     }                                
                 }
             }
@@ -113,24 +114,6 @@ var map = (function () {
                 // break;
             // }
         // }
-    // };
-
-    // var map = {
-    //     'map': {
-    //         // coordinates 
-    //     },
-    //     'collision' : function () {
-    //         // 
-    //     }   
-    // };
-
-    // var Game = function (map) {
-    //     this.collision = map;
-    // };
-
-    // this.collision.map(map);
-    // this.collision.player();
-
     return publicAPI
 
 }())

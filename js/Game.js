@@ -22,16 +22,30 @@ var Game = function (canvas, debug, test, players, food) {
 Game.prototype.init = function () {
     'use strict';
     var _this = this;
-    this.objects['players'].forEach(function(player){
-        player.init();
+    debugger;
+    this.objects['players'].forEach(function(player, i, players){
+        player.init(players, _this, i);
         player.bindEventListeners(_this.delay);
     });
+
+
+    // Take this out of Game constuctor soon!!
+    for (var i = 0; i < this.objects['players'].length; i++) {
+        for (var k = 1; k < this.objects['players'].length; k++){
+            if (this.objects['players'][i].positions[0].x === this.objects['players'][k].positions[0].x && this.objects['players'][i].positions[0].y === this.objects['players'][k].positions[0].y){
+                this.objects['players'][i].init(this.objects['players'], this, i);
+            }
+        }
+    }
+
+
+
     this.objects['food'].init(this, this.objects['players']);
     this.tick(this.delay);
     this.animate();
 };
 
-Game.prototype.drawGridLines = function () {
+Game.prototype.drawGridLines = function draw() {
     'use strict';
     if (this.debug) {
         // Horizontal Lines 

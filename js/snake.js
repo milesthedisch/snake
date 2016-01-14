@@ -1,4 +1,4 @@
-var Snake = function() {
+var Snake = function(id) {
     'use strict';
     // If i want snakes
     this.positions = []; 
@@ -8,7 +8,8 @@ var Snake = function() {
     // Score
     this.score = null; 
     // state
-    this.state = {'dead': false};    
+    this.state = {'dead': false};
+    this.id = id || null;    
 };
 
 Snake.prototype.eat = function (game, food) {
@@ -18,16 +19,19 @@ Snake.prototype.eat = function (game, food) {
     food.init(game, game.objects['players']);
 };
 
-Snake.prototype.createSnake = function (length, x, y, x2, y2) {
+Snake.prototype.snakeSpawn = function (map) {
     'use strict';
-    for (var i = 0; i < length; i++) {
-        this.positions.push({x: i, y: 0});
-    }    
-};
+    var _this = this;
+    var mapOffset = {x: map.canvasWidth - 2, y: map.canvasHeight - 2};
+    var x = utils.randPos(1, mapOffset.x);
+    var y = utils.randPos(1, mapOffset.y);
+    this.positions.pop();
+    this.positions.push({x: x, y: y});
+}
 
-Snake.prototype.init = function () {
+Snake.prototype.init = function (players, map, i) {
     'use strict';
-    this.createSnake(6, 2, 2, 2, 2);
+    this.snakeSpawn(map);
 };
 
 Snake.prototype.movement = function (directionX, directionY) {
@@ -41,8 +45,6 @@ Snake.prototype.stop = function (game){
     this.state = {
         'dead': true
     }
-    // Deleted exsiting positions
-    this.positions.splice(0);
     // Store last frames positions in positions
     this.positions = this.lastPos;
     this.dx = null;
@@ -50,12 +52,13 @@ Snake.prototype.stop = function (game){
 }
 
 Snake.prototype.update = function (player) { 
-        if (this.state['dead'] === true) {
-            return;
-        }
+        // Dead flag
+        if (this.state['dead'] === true) return;
+
         // Last frame
         this.last();
 
+        // Current frame
         this.x = this.positions[0].x;
         this.y = this.positions[0].y;
         this.x += this.dx;
@@ -109,6 +112,8 @@ Snake.prototype.bindEventListeners = function (delay) {
         }
     }, delay);
 };
+
+
 
 
 
