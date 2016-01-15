@@ -21,7 +21,6 @@ Snake.prototype.eat = function (game, food) {
 
 Snake.prototype.snakeSpawn = function (map) {
     'use strict';
-    var _this = this;
     var mapOffset = {x: map.canvasWidth - 2, y: map.canvasHeight - 2};
     var x = utils.randPos(1, mapOffset.x);
     var y = utils.randPos(1, mapOffset.y);

@@ -44,22 +44,6 @@ var utils = (function IIFE() {
             return out;
         }
 
-        // initiate : function (objects) {
-        //     if (objects && typeof objects === 'object') {
-        //         for (key in objects) {
-        //           var keys = objects[key];
-        //           if (Array.isArray(keys)) {
-        //             keys.forEach(function(arr){
-        //                 arr.init(that, that.objects['players'])
-        //                     if (key.hasOwnProperty('bindEventListeners')){
-        //                         arr.bindEventListeners();
-        //                     }
-        //                 });
-        //             }
-        //         }
-        //     }
-        // };
-
     };
 
     return publicAPI;
