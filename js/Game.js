@@ -1,22 +1,29 @@
 var Game = function (canvas, debug, test, players, food) {
     'use strict';
-    this.debug = debug || false;
+    // debuggin and testing state
+    this.state = {
+        'debug' : false || debug,
+        'test'  : false || test
+    }
+
+    // collision objects in game
     this.objects = {
         "players" : players || [],
         "food" : food || []
     };
+
     // Canvas
     this.canvas = canvas;
     this.context = this.canvas.getContext('2d');    
-    this.canvasWidth = 40;
-    this.canvasHeight = 40;
+    this.canvasWidth = 10;
+    this.canvasHeight = 10;
     this.rendererHeight = this.canvas.offsetWidth;
     this.rendererWidth = this.canvas.offsetHeight;
 
     // Ratio for renderer and canvas 
     this.ratioWidth = this.rendererWidth / this.canvasWidth;
     this.ratioHeight = this.rendererHeight / this.canvasHeight;
-    this.delay = 1000;
+    this.delay = 500;
 };
 
 Game.prototype.init = function () {
@@ -24,10 +31,13 @@ Game.prototype.init = function () {
     var _this = this;
     debugger;
     this.objects['players'].forEach(function(player, i, players){
-        player.init(players, _this, i);
-        player.bindEventListeners(_this.delay);
+        if (_this.state['test']) {
+            player.testSpawn(i)
+        } else {
+            player.init(players, _this, i); 
+        }
+            player.bindEventListeners(_this.delay); 
     });
-
 
     // Take this out of Game constuctor soon!!
     for (var i = 0; i < this.objects['players'].length; i++) {
@@ -38,8 +48,6 @@ Game.prototype.init = function () {
         }
     }
 
-
-
     this.objects['food'].init(this, this.objects['players']);
     this.tick(this.delay);
     this.animate();
@@ -47,7 +55,7 @@ Game.prototype.init = function () {
 
 Game.prototype.drawGridLines = function draw() {
     'use strict';
-    if (this.debug) {
+    if (this.state['debug']) {
         // Horizontal Lines 
         for (var i = 0; i < this.rendererWidth; i = i + this.ratioWidth) {
             this.context.beginPath();
@@ -111,7 +119,10 @@ Game.prototype.update = function () {
     'use strict';
     var game = this;
     this.objects['players'].forEach(function(player){
-        player.update(player);
+        player.update(player);      
     });
     map.collision(game);
+    map.collision(game);
+    map.collision(game);
 };
+

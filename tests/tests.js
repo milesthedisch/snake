@@ -6,57 +6,71 @@
 ///////////////
 //  Testing  //
 ///////////////
+var Tests = (function () {
+    'use strict';
+   var publicAPI = {
 
-Snake.prototype.wallCollision = function (dirX, dirY, x, y) {
-    this.dx = dirX;
-    this.dy = dirY;
+        'wallCollision' : function (id) {
+            switch (this.id) {
+                case this.id % 2 === 0:
+                    if (this.id === 2){
+                      this.dx = 1;
+                    } else if (this.id === 0) {
+                      this.dx = -1;
+                    } else {
+                      this.id % 4 === 0 ? this.dx = -1 : this.dx = 1;
+                    }
+                    break;
+                case this.id % 2 !== 0:
+                    this.id % 3 === 0 ? this.dy = 1 : this.dy = -1;
+                    break; 
+            }
+            // this.position.push({x: })
+            this.tick(1000);
+        },
 
-    this.ax = -dirX;
-    this.ay = dirY;
+        'headOnCollision' : function (dirX, dirY, x, y ) {
+            
+            this.dx = dirX;
+            this.dy = dirY || 0;
 
-    this.createSnake(1, x, y, x, y);
-    this.tick(1000);
-    this.animate();
-};
+            this.ax = -(dirX);
+            this.ay = dirY || 0;
 
-Snake.prototype.headOnCollision = function (dirX, dirY, x, y ) {
-    
-    this.dx = dirX;
-    this.dy = dirY || 0;
+            this.createSnake(1, x, y, x, y);
+            this.tick(1000);
+            this.animate();
+        },
 
-    this.ax = -(dirX);
-    this.ay = dirY || 0;
+        'nearMiss' : function (x, y) {
 
-    this.createSnake(1, x, y, x, y);
-    this.tick(1000);
-    this.animate();
-};
+            this.dx = -1;
+            this.dy = 0;
 
-Snake.prototype.nearMiss = function (x, y) {
+            this.ax = 0;
+            this.ay = -1;
 
-    this.dx = -1;
-    this.dy = 0;
+            this.createSnake(1, x + 2, y, x, y + 2);
 
-    this.ax = 0;
-    this.ay = -1;
+            this.tick(1000);
+            this.animate();
+        },
 
-    this.createSnake(1, x + 2, y, x, y + 2);
+        'nearMiss2' : function (x, y) {
 
-    this.tick(1000);
-    this.animate();
-};
+            this.dx = 1;
+            this.dy = 0;
 
-Snake.prototype.nearMiss2 = function (x, y) {
+            this.ax = 0;
+            this.ay = 1;
 
-    this.dx = 1;
-    this.dy = 0;
+            this.createSnake(1, x - 1, y + 1, x - 1, y - 1);
 
-    this.ax = 0;
-    this.ay = 1;
+            this.tick(1000);
+            this.animate(); 
+        }
 
-    this.createSnake(1, x - 1, y + 1, x - 1, y - 1);
+    }
 
-    this.tick(1000);
-    this.animate(); 
-};
-
+    return publicAPI;
+})()         

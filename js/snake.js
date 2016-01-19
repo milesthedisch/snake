@@ -1,10 +1,10 @@
-var Snake = function(id) {
+var Snake = function(id, dx, dy) {
     'use strict';
     // If i want snakes
     this.positions = []; 
     // Positional values
-    this.dx = 0;
-    this.dy = 1; 
+    this.dx = dx || 0;
+    this.dy = dy || 1; 
     // Score
     this.score = null; 
     // state
@@ -30,8 +30,17 @@ Snake.prototype.snakeSpawn = function (map) {
 
 Snake.prototype.init = function (players, map, i) {
     'use strict';
-    this.snakeSpawn(map);
+    if (map.state['test']) {
+        
+    } else {
+        this.snakeSpawn(map);       
+    }
 };
+
+// Snake.prototype.testSpawn = function () {
+//     'use strict';
+    
+// }
 
 Snake.prototype.movement = function (directionX, directionY) {
     'use strict';
