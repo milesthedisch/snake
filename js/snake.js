@@ -15,7 +15,7 @@ var Snake = function(id, dx, dy) {
 Snake.prototype.eat = function (game, food) {
     'use strict';
     this.score++
-    this.positions.push({x: food.x, y: food.y});
+    this.positions[this.positions.length] = ({x: food.x, y: food.y});
     food.init(game, game.objects['players']);
 };
 
@@ -31,7 +31,7 @@ Snake.prototype.snakeSpawn = function (map) {
 Snake.prototype.init = function (players, map, i) {
     'use strict';
     if (map.state['test']) {
-        
+
     } else {
         this.snakeSpawn(map);       
     }

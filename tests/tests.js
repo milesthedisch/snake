@@ -9,7 +9,6 @@
 var Tests = (function () {
     'use strict';
    var publicAPI = {
-
         'wallCollision' : function (id) {
             switch (this.id) {
                 case this.id % 2 === 0:

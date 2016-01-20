@@ -36,7 +36,7 @@ Game.prototype.init = function () {
         } else {
             player.init(players, _this, i); 
         }
-            player.bindEventListeners(_this.delay); 
+        player.bindEventListeners(_this.delay); 
     });
 
     // Take this out of Game constuctor soon!!
@@ -118,11 +118,9 @@ Game.prototype.tick = function (delay) {
 Game.prototype.update = function () {
     'use strict';
     var game = this;
-    this.objects['players'].forEach(function(player){
-        player.update(player);      
+    this.objects['players'].forEach(function(player, i){
+        player.update(player);     
     });
-    map.collision(game);
-    map.collision(game);
     map.collision(game);
 };
 
