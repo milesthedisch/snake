@@ -26,28 +26,40 @@ var Game = function (canvas, debug, test, players, food) {
     this.delay = 500;
 };
 
+Game.prototype.spawnCheck = function (players) {
+    var _this = this;
+     players.forEach(function(player){
+        
+        var otherPlayers = players.filter(function(otherPlayer){
+            return otherPlayers !== player
+        })
+
+        if (otherPlayers) {
+            otherPlayers.forEach(function(op){
+                var opx = op.positions[0].x,
+                    opy = op.positions[0].y,
+                    px = player.positions[0].x,
+                    py = player.positions[0].y
+
+                while (opx === px && opy === py){
+                    op.init(players, _this, i)
+                }
+            })
+        }
+     })   
+}
+
 Game.prototype.init = function () {
     'use strict';
     var _this = this;
-    debugger;
     this.objects['players'].forEach(function(player, i, players){
-        if (_this.state['test']) {
-            player.testSpawn(i)
-        } else {
-            player.init(players, _this, i); 
-        }
+        player.init(players, _this, i); 
         player.bindEventListeners(_this.delay); 
-    });
-
-    // Take this out of Game constuctor soon!!
-    for (var i = 0; i < this.objects['players'].length; i++) {
-        for (var k = 1; k < this.objects['players'].length; k++){
-            if (this.objects['players'][i].positions[0].x === this.objects['players'][k].positions[0].x && this.objects['players'][i].positions[0].y === this.objects['players'][k].positions[0].y){
-                this.objects['players'][i].init(this.objects['players'], this, i);
-            }
+        if (i === players.length) { 
+            this.spawnCheck(players); 
         }
-    }
-
+    })
+    
     this.objects['food'].init(this, this.objects['players']);
     this.tick(this.delay);
     this.animate();
