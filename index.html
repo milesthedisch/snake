@@ -30,11 +30,13 @@
 	<script>
 	 	window.addEventListener('DOMContentLoaded', function(){
 	   	    var players = [];	
-	   	    for (var i = 0; i < 10; i++) {
+	   	    debugger;
+	   	    for (var i = 0; i < 9; i++) {
 	 			players[i] = new Snake(i); 
 	   	    }	
 		    var mice = new Food();
 		    var myGame = new Game(document.querySelector('canvas'), true, false, players, mice);
+		    debugger;
 		    myGame.init();
 		});
 	</script>

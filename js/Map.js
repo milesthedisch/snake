@@ -46,6 +46,7 @@ var map = (function () {
                         player.positions.forEach(function(playerPos, k){
                             if (playerPos.x === otherPos.x && playerPos.y === otherPos.y) {
                                 console.log('you hit another player')
+                                debugger;
                                 otherplayer.stop();
                             }
                         })

@@ -28,10 +28,10 @@ var Game = function (canvas, debug, test, players, food) {
 
 Game.prototype.spawnCheck = function (players) {
     var _this = this;
-     players.forEach(function(player){
+     players.forEach(function(player, k){
         
         var otherPlayers = players.filter(function(otherPlayer){
-            return otherPlayers !== player
+            return otherPlayer.id !== player.id
         })
 
         if (otherPlayers) {
@@ -41,8 +41,8 @@ Game.prototype.spawnCheck = function (players) {
                     px = player.positions[0].x,
                     py = player.positions[0].y
 
-                while (opx === px && opy === py){
-                    op.init(players, _this, i)
+                if (opx === px && opy === py){
+                    op.init(players, _this, op.id)
                 }
             })
         }
@@ -55,11 +55,10 @@ Game.prototype.init = function () {
     this.objects['players'].forEach(function(player, i, players){
         player.init(players, _this, i); 
         player.bindEventListeners(_this.delay); 
-        if (i === players.length) { 
-            this.spawnCheck(players); 
+        if (i === players.length - 1) { 
+            _this.spawnCheck(players); 
         }
     })
-    
     this.objects['food'].init(this, this.objects['players']);
     this.tick(this.delay);
     this.animate();

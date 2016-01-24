@@ -9,7 +9,7 @@ var Snake = function(id, dx, dy) {
     this.score = null; 
     // state
     this.state = {'dead': false};
-    this.id = id || null;    
+    this.id = id + 1 || null;    
 };
 
 Snake.prototype.eat = function (game, food) {
