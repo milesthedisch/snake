@@ -4,7 +4,7 @@ var Snake = function(id, dx, dy) {
     this.positions = []; 
     // Positional values
     this.dx = dx || 0;
-    this.dy = dy || 1; 
+    this.dy = dy || 0; 
     // Score
     this.score = null; 
     // state
@@ -12,7 +12,9 @@ var Snake = function(id, dx, dy) {
         'dead': false, 
         'color': utils.randColor()
     };
-    this.id = id + 1 || null;    
+    this.id = parseInt(1 + id) || null;    
+    // Color
+    this.color;
 };
 
 Snake.prototype.eat = function (game, food) {
@@ -33,17 +35,17 @@ Snake.prototype.snakeRandSpawn = function (map) {
 
 Snake.prototype.init = function (players, map, i) {
     'use strict';
-    // if (map.state['test']) {
-
-    // } else {
+    if (map.state['test']) {
+        this.testSpawn(this);
+    } else {
         this.snakeRandSpawn(map);       
-    // }
+    }
 };
 
-// Snake.prototype.testSpawn = function () {
-//     'use strict';
-    
-// }
+Snake.prototype.testSpawn = function (player, map) {
+    'use strict';
+    tests.headOnCollision(player);
+}
 
 Snake.prototype.movement = function (directionX, directionY) {
     'use strict';
@@ -53,16 +55,13 @@ Snake.prototype.movement = function (directionX, directionY) {
 
 Snake.prototype.stop = function (collisionType){
     'use strict'
-    if (collisionType === 'last') {
-        // Store next frame position in positions
-        this.positions = this.ghost
-    } else {
+    if (collisionType !== 'merge') {
         // Store last frames positions in positions
         this.positions = this.lastPos;    
     }
-     this.state = {
-            'dead': true
-        }
+    this.state = {
+        'dead': true
+    }
     this.dx = null;
     this.dy = null;
 }
@@ -93,11 +92,10 @@ Snake.prototype.last = function () {
 }
 
 Snake.prototype.next = function () {
-    this.nx = this.tail.x + this.dx;
-    this.ny = this.tail.y + this.dy;
-    this.ghost = {x: this.nx, y: this.ny};
+    this.ghost = {x: this.tail.x + this.dx, y: this.tail.y + this.dy};
     this.nextPos = utils.deepCopy(this.positions);
-    this.nextPos[this.nextPos.length - 1] = this.ghost;
+    this.nextPos.shift();
+    this.nextPos.unshift(this.ghost);
 }
 
 Snake.prototype.bindEventListeners = function (delay) {

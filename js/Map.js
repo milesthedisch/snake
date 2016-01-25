@@ -41,19 +41,20 @@ var map = (function () {
                         }
                     });
                 });
-                debugger;
                 allOtherPlayers.forEach(function(otherplayer){
-                    if (otherplayer.ghost.x === player.ghost.x && otherplayer.ghost.y === player.ghost.y){
-                        console.log('head collision')
-                        otherplayer.stop('last');
-                        player.stop('last');
+                    if ((otherplayer.lastPos[0].x === player.x && otherplayer.lastPos[0].y === player.y) || (player.lastPos[0].x === otherplayer.x && player.lastPos[0].y === otherplayer.y)){
+                                debugger;
+                                console.log('head collision', 'player:', player.positions[0], 'otherplayer:', otherplayer.positions[0],
+                                            'playerGhost:', player.ghost, 'otherPlayerGhost:', otherplayer.ghost);
+                                otherplayer.stop();
+                                player.stop();
                     }
                     otherplayer.positions.forEach(function(otherPos, b){
                         player.positions.forEach(function(playerPos, k){
-                            if (playerPos.x === otherPos.x && playerPos.y === otherPos.y) {
+                             if (playerPos.x === otherPos.x && playerPos.y === otherPos.y) {
                                 console.log('you hit another player')
-                                player.stop();
-                                otherplayer.stop();
+                                player.stop('merge');
+                                otherplayer.stop('merge');
                             }
                         })
                     })

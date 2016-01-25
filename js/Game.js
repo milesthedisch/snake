@@ -15,8 +15,8 @@ var Game = function (canvas, debug, test, players, food) {
     // Canvas
     this.canvas = canvas;
     this.context = this.canvas.getContext('2d');    
-    this.canvasWidth = 9;
-    this.canvasHeight = 9;
+    this.canvasWidth = 11;
+    this.canvasHeight = 11;
     this.rendererHeight = this.canvas.offsetWidth;
     this.rendererWidth = this.canvas.offsetHeight;
 
@@ -55,13 +55,15 @@ Game.prototype.init = function () {
     this.objects['players'].forEach(function(player, i, players){
         player.init(players, _this, i); 
         player.bindEventListeners(_this.delay); 
-        if (i === players.length - 1) { 
+        if (i === players.length - 1 && _this.state['test'] === false) { 
             _this.spawnCheck(players); 
         }
     })
     this.objects['food'].init(this, this.objects['players']);
     this.tick(this.delay);
     this.animate();
+    console.log(this.objects.players)
+    debugger;
 };
 
 Game.prototype.drawGridLines = function draw() {
@@ -90,6 +92,7 @@ Game.prototype.animate = function () {
     'use strict';
     this.draw();
     this.ref = window.requestAnimationFrame(this.animate.bind(this));
+    console.log('drawing')
 };
 
 Game.prototype.draw = function () {
@@ -111,7 +114,8 @@ Game.prototype.drawSnakes = function (color) {
     'use strict';
     var _this = this;
     this.objects['players'].forEach(function(player){
-        player.state['dead'] === true ? color = 'black' : player.id !== 1 ? color = "green" : color = player.state['color']
+        player.state['dead'] === true ? color = 'black' : player.id === 1 ? color = "green" : color = player.state['color']
+        player.color = color;
         player.positions.forEach(function(s){
             _this.context.fillStyle = color || 'green';
             _this.context.fillRect(s.x * _this.ratioWidth, s.y * _this.ratioHeight, _this.ratioWidth, _this.ratioHeight);    
@@ -124,6 +128,8 @@ Game.prototype.tick = function (delay) {
     var _this = this;
     this.timeout = setTimeout(_this.tick.bind(this, delay), delay);
     this.update(); 
+    debugger;
+    console.log('tick')
 };
 
 Game.prototype.update = function () {
@@ -132,7 +138,24 @@ Game.prototype.update = function () {
     this.objects['players'].forEach(function(player, i){
         player.update(player);     
     });
-    map.collision(game);
+    map.collision(game); 
+    if (this.allDead()){
+        this.reset()
+    }
 };
+
+Game.prototype.allDead = function () {
+    'use strict';   
+    return this.objects['players'].every(function(player){
+        return player.state['dead'];
+    })
+};
+
+Game.prototype.reset = function () {
+    'use strict';
+    this.draw();
+    clearTimeout(this.timeout)
+    window.cancelAnimationFrame(this.ref)
+}
 
     

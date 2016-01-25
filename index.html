@@ -12,31 +12,32 @@
 	<script src="tests/tests.js"></script>
 	<style>
 		* {box-sizing: border-box;}
-	    body{ background-color: ivory; }
-	    canvas{border:1px solid red;
-	    	   width: 500px;
-	    	   height: 500px;}
+	    body { background-color: dark-grey; }
+	    canvas {
+	    	   border:1px solid red;
+	    	   width: 700px;
+	    	   height: 700px;
+	    	}
 	  	.container {
 	  		margin: 0 auto;
-	  		margin-top: 5em;
-	  		width: 35%;
+	  		vertical-align: center;
+	  		width: 700px;
 	  	}
 	</style>
 </head>
 <body>
 	<div class="container">
-		<canvas id="canvas" width="500" height="500">	
+		<canvas id="canvas" width="700" height="700">	
 	</div>
 	<script>
+		// @params Game ( canvas, debug, test, players, food )
 	 	window.addEventListener('DOMContentLoaded', function(){
 	   	    var players = [];	
-	   	    debugger;
-	   	    for (var i = 0; i < 2; i++) {
+	   	    for (var i = 0; i < 4; i++) {
 	 			players[i] = new Snake(i); 
 	   	    }	
 		    var mice = new Food();
-		    var myGame = new Game(document.querySelector('canvas'), true, false, players, mice);
-		    debugger;
+		    var myGame = new Game(document.querySelector('canvas'), true, true, players, mice);
 		    myGame.init();
 		});
 	</script>
