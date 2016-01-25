@@ -80,14 +80,88 @@ var tests = (function () {
                 if ((_this.id + 1) % 2 === 0) {
                     if ((_this.id + 1) % 4 === 0) {
                         _this.dx = 1; 
+                        _this.positions[0] = {x: 2 - (i - 1), y: 5 } 
+                    } else {
+                        _this.dx = -1;
+                        _this.positions[0] = {x: 9 + (i - 2), y: 5}   
+                    }  
+                }
+            } 
+        },
+        'headOnCollision3' : function (player   ) {
+            var offset = 1 || offset;
+            var _this = player;
+            if (_this.id % 4 === 0 ) { i++ };
+            if ( _this.id % 2 === 0){
+                if (_this.id % 4 === 0){
+                  _this.dy = -1;
+                  _this.positions[0] = {x: 5, y: 9 + (i - 2)}
+                } else {
+                  _this.dy = 1;
+                  _this.positions[0] = {x: 5 , y: 2 - (i - 1)}
+                }
+            } else {
+                if ((_this.id + 1) % 2 === 0) {
+                    if ((_this.id + 1) % 4 === 0) {
+                        _this.dx = 1; 
+                        _this.positions[0] = {x: 1 - (i - 1), y: 5 } 
+                    } else {
+                        _this.dx = -1;
+                        _this.positions[0] = {x: 10 + (i - 2), y: 5}   
+                    }  
+                }
+            } 
+        },
+        'headOnCollision4' : function (player) {
+            var offset = 1 || offset;
+            var _this = player;
+            if (_this.id % 4 === 0 ) { i++ };
+            if ( _this.id % 2 === 0){
+                if (_this.id % 4 === 0){
+                  _this.dy = -1;
+                  _this.positions[0] = {x: 5, y: 9 + (i - 2)}
+                } else {
+                  _this.dy = 1;
+                  _this.positions[0] = {x: 5 , y: 2 - (i - 1)}
+                }
+            } else {
+                if ((_this.id + 1) % 2 === 0) {
+                    if ((_this.id + 1) % 4 === 0) {
+                        _this.dx = 1; 
+                        _this.positions[0] = {x: 0 - (i - 1), y: 5 } 
+                    } else {
+                        _this.dx = -1;
+                        _this.positions[0] = {x: 11 + (i - 2), y: 5}   
+                    }  
+                }
+            } 
+        },
+        'bodyCollision' : function () {
+            var offset = 1 || offset;
+            var _this = player;
+            if (_this.id % 4 === 0 ) { i++ };
+            if ( _this.id % 2 === 0){
+                if (_this.id % 4 === 0){
+                  _this.dy = -1;
+                  _this.positions[0] = {x: 5, y: 9 + (i - 2)}
+                } else {
+                  _this.dy = 1;
+                  _this.positions[0] = {x: 5 , y: 2 - (i - 1)}
+                }
+            } else {
+                if ((_this.id + 1) % 2 === 0) {
+                    if ((_this.id + 1) % 4 === 0) {
+                        _this.dx = 1; 
                         _this.positions[0] = {x: 3 - (i - 1), y: 5 } 
                     } else {
                         _this.dx = -1;
                         _this.positions[0] = {x: 7 + (i - 1), y: 5}
+                        _this.positions.push({x: 7 + (i), y: 5})    
                     }  
                 }
             } 
-        }
+        },
+        // WIP: bodyCollision2 fn
 
         // 'nearMiss' : function (x, y) {
 
