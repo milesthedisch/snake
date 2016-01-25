@@ -15,8 +15,8 @@ var Game = function (canvas, debug, test, players, food) {
     // Canvas
     this.canvas = canvas;
     this.context = this.canvas.getContext('2d');    
-    this.canvasWidth = 10;
-    this.canvasHeight = 10;
+    this.canvasWidth = 9;
+    this.canvasHeight = 9;
     this.rendererHeight = this.canvas.offsetWidth;
     this.rendererWidth = this.canvas.offsetHeight;
 
@@ -111,7 +111,7 @@ Game.prototype.drawSnakes = function (color) {
     'use strict';
     var _this = this;
     this.objects['players'].forEach(function(player){
-        player.state['dead'] === true ? color = 'grey' : color = 'green'
+        player.state['dead'] === true ? color = 'black' : player.id !== 1 ? color = "green" : color = player.state['color']
         player.positions.forEach(function(s){
             _this.context.fillStyle = color || 'green';
             _this.context.fillRect(s.x * _this.ratioWidth, s.y * _this.ratioHeight, _this.ratioWidth, _this.ratioHeight);    
@@ -135,3 +135,4 @@ Game.prototype.update = function () {
     map.collision(game);
 };
 
+    

@@ -41,12 +41,18 @@ var map = (function () {
                         }
                     });
                 });
+                debugger;
                 allOtherPlayers.forEach(function(otherplayer){
+                    if (otherplayer.ghost.x === player.ghost.x && otherplayer.ghost.y === player.ghost.y){
+                        console.log('head collision')
+                        otherplayer.stop('last');
+                        player.stop('last');
+                    }
                     otherplayer.positions.forEach(function(otherPos, b){
                         player.positions.forEach(function(playerPos, k){
                             if (playerPos.x === otherPos.x && playerPos.y === otherPos.y) {
                                 console.log('you hit another player')
-                                debugger;
+                                player.stop();
                                 otherplayer.stop();
                             }
                         })
