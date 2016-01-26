@@ -44,7 +44,7 @@ Snake.prototype.init = function (players, map, i) {
 
 Snake.prototype.testSpawn = function (player, map) {
     'use strict';
-    tests.headOnCollision3(player);
+    tests.bodyCollision2(player);
 }
 
 Snake.prototype.movement = function (directionX, directionY) {

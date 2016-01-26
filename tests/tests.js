@@ -136,7 +136,7 @@ var tests = (function () {
                 }
             } 
         },
-        'bodyCollision' : function () {
+        'bodyCollision' : function (player) {
             var offset = 1 || offset;
             var _this = player;
             if (_this.id % 4 === 0 ) { i++ };
@@ -161,7 +161,32 @@ var tests = (function () {
                 }
             } 
         },
-        // WIP: bodyCollision2 fn
+        'bodyCollision2' : function (player){
+            var offset = 1 || offset;
+            var _this = player;
+            if (_this.id % 4 === 0 ) { i++ };
+            if ( _this.id % 2 === 0){
+                if (_this.id % 4 === 0){
+                  _this.dy = -1;
+                  _this.positions[0] = {x: 5, y: 9 + (i - 2)}
+                } else {
+                  _this.dy = 1;
+                  _this.positions[0] = {x: 5 , y: 2 - (i - 1)}
+                  _this.positions.push({x: 5, y: 2 - (i)})
+
+                }
+            } else {
+                if ((_this.id + 1) % 2 === 0) {
+                    if ((_this.id + 1) % 4 === 0) {
+                        _this.dx = 1; 
+                        _this.positions[0] = {x: 3 - (i - 1), y: 5 } 
+                    } else {
+                        _this.dx = -1;
+                        _this.positions[0] = {x: 9 + (i - 1), y: 5}
+                    }  
+                }
+            } 
+        }
 
         // 'nearMiss' : function (x, y) {
 
