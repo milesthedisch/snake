@@ -24,6 +24,10 @@ var Game = function (canvas, debug, test, players, food) {
     this.ratioWidth = this.rendererWidth / this.canvasWidth;
     this.ratioHeight = this.rendererHeight / this.canvasHeight;
     this.delay = 500;
+
+    // Test scripts
+    this.allTests = [] || null;
+    this.testCounter = 0;
 };
 
 Game.prototype.spawnCheck = function (players) {
@@ -52,6 +56,7 @@ Game.prototype.spawnCheck = function (players) {
 Game.prototype.init = function () {
     'use strict';
     var _this = this;
+    this.concatTests();
     this.objects['players'].forEach(function(player, i, players){
         player.init(players, _this, i); 
         player.bindEventListeners(_this.delay); 
@@ -63,7 +68,7 @@ Game.prototype.init = function () {
     this.tick(this.delay);
     this.animate();
     console.log(this.objects.players)
-    debugger;
+    
 };
 
 Game.prototype.drawGridLines = function draw() {
@@ -128,7 +133,7 @@ Game.prototype.tick = function (delay) {
     var _this = this;
     this.timeout = setTimeout(_this.tick.bind(this, delay), delay);
     this.update(); 
-    debugger;
+    
     console.log('tick')
 };
 
@@ -140,7 +145,11 @@ Game.prototype.update = function () {
     });
     map.collision(game); 
     if (this.allDead()){
-        this.reset()
+        this.testCounter++
+        this.reset();
+        if (this.state['test']) {
+            this.init();
+        }
     }
 };
 
@@ -151,11 +160,32 @@ Game.prototype.allDead = function () {
     })
 };
 
+Game.prototype.purge = function () {
+    'use strict';
+    var players = this.objects['players'];
+        players = utils.erase(players)   
+}
+
 Game.prototype.reset = function () {
     'use strict';
     this.draw();
-    clearTimeout(this.timeout)
-    window.cancelAnimationFrame(this.ref)
+    this.timeout = this.timeout + 1
+    while (this.timeout--){
+        clearTimeout(this.timeout);
+    }
+    window.cancelAnimationFrame(this.ref);
+    this.purge();
+}
+
+Game.prototype.concatTests = function () {
+    'use strict';
+    
+    var testsAPI = tests        
+        for (var test in testsAPI) {
+            if (tests.hasOwnProperty(test)) {
+                this.allTests.push(testsAPI[test]);
+            }
+        }
 }
 
     

@@ -42,13 +42,15 @@ var map = (function () {
                     });
                 });
                 allOtherPlayers.forEach(function(otherplayer){
-                if (otherplayer.dx === (player.dx * -1) && otherplayer.dy === (player.dy * -1) || player.dx === (otherplayer.dx * -1) && player.dy === (otherpayer.dy * -1))    
-                    if ((otherplayer.lastPos[0].x === player.x && otherplayer.lastPos[0].y === player.y) || (player.lastPos[0].x === otherplayer.x && player.lastPos[0].y === otherplayer.y)){
-                                debugger;
-                                console.log('head collision', 'player:', player.positions[0], 'otherplayer:', otherplayer.positions[0],
-                                            'playerGhost:', player.ghost, 'otherPlayerGhost:', otherplayer.ghost);
-                                otherplayer.stop();
-                                player.stop();
+                    if (otherplayer.state['dead'] === true) { return; }
+                    if (otherplayer.dx === (player.dx * -1) && otherplayer.dy === (player.dy * -1) || player.dx === (otherplayer.dx * -1) && player.dy === (otherpayer.dy * -1)) {   
+                        if ((otherplayer.lastPos[0].x === player.x && otherplayer.lastPos[0].y === player.y) || (player.lastPos[0].x === otherplayer.x && player.lastPos[0].y === otherplayer.y)){
+                                    debugger;
+                                    console.log('head collision', 'player:', player.positions[0], 'otherplayer:', otherplayer.positions[0],
+                                                'playerGhost:', player.ghost, 'otherPlayerGhost:', otherplayer.ghost);
+                                    otherplayer.stop();
+                                    player.stop();
+                        }
                     }
                     otherplayer.positions.forEach(function(otherPos, b){
                         player.positions.forEach(function(playerPos, k){

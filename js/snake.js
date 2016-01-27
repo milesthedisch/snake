@@ -36,7 +36,7 @@ Snake.prototype.snakeRandSpawn = function (map) {
 Snake.prototype.init = function (players, map, i) {
     'use strict';
     if (map.state['test']) {
-        this.testSpawn(this);
+        this.testSpawn(this, map);
     } else {
         this.snakeRandSpawn(map);       
     }
@@ -44,7 +44,8 @@ Snake.prototype.init = function (players, map, i) {
 
 Snake.prototype.testSpawn = function (player, map) {
     'use strict';
-    tests.bodyCollision2(player);
+    debugger;
+    map.allTests[map.testCounter](player);
 }
 
 Snake.prototype.movement = function (directionX, directionY) {

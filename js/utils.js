@@ -51,6 +51,13 @@ var utils = (function IIFE() {
                 out.push(obj);
             }
             return out;
+        },
+
+        'erase' : function (arr) {
+            return arr.map(function(value){
+                value.state['dead'] = false;
+                return value.positions.splice(value.positions.length)
+            })
         }
 
     };
