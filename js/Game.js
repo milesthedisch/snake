@@ -23,7 +23,7 @@ var Game = function (canvas, debug, test, players, food) {
     // Ratio for renderer and canvas 
     this.ratioWidth = this.rendererWidth / this.canvasWidth;
     this.ratioHeight = this.rendererHeight / this.canvasHeight;
-    this.delay = 500;
+    this.delay = 1000;
 
     // Test scripts
     this.allTests = [] || null;
@@ -64,6 +64,7 @@ Game.prototype.init = function () {
             _this.spawnCheck(players); 
         }
     })
+    debugger;
     this.objects['food'].init(this, this.objects['players']);
     this.tick(this.delay);
     this.animate();
@@ -146,12 +147,15 @@ Game.prototype.update = function () {
     map.collision(game); 
     if (this.allDead()){
         this.testCounter++
-        this.reset();
-        if (this.state['test']) {
+        this.gameOver();
+        if (this.state['test'] && this.testCounter < this.allTests.length) {
             this.init();
+            this.drawSnakes();
+        } else {
+            this.gameOver();
         }
     }
-};
+}
 
 Game.prototype.allDead = function () {
     'use strict';   
@@ -166,7 +170,7 @@ Game.prototype.purge = function () {
         players = utils.erase(players)   
 }
 
-Game.prototype.reset = function () {
+Game.prototype.gameOver = function () {
     'use strict';
     this.draw();
     this.timeout = this.timeout + 1
@@ -179,7 +183,6 @@ Game.prototype.reset = function () {
 
 Game.prototype.concatTests = function () {
     'use strict';
-    
     var testsAPI = tests        
         for (var test in testsAPI) {
             if (tests.hasOwnProperty(test)) {
