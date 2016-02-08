@@ -4,7 +4,7 @@ var Game = function (canvas, debug, test, players, food) {
     this.state = {
         'debug' : false || debug,
         'test'  : false || test
-    }
+    };
 
     // collision objects in game
     this.objects = {
@@ -31,27 +31,28 @@ var Game = function (canvas, debug, test, players, food) {
 };
 
 Game.prototype.spawnCheck = function (players) {
+    'use strict';
     var _this = this;
      players.forEach(function(player, k){
         
         var otherPlayers = players.filter(function(otherPlayer){
-            return otherPlayer.id !== player.id
-        })
+            return otherPlayer.id !== player.id;
+        });
 
         if (otherPlayers) {
             otherPlayers.forEach(function(op){
                 var opx = op.positions[0].x,
                     opy = op.positions[0].y,
                     px = player.positions[0].x,
-                    py = player.positions[0].y
+                    py = player.positions[0].y;
 
                 if (opx === px && opy === py){
-                    op.init(players, _this, op.id)
+                    op.init(players, _this, op.id);
                 }
-            })
+            });
         }
-     })   
-}
+     });   
+};
 
 Game.prototype.init = function () {
     'use strict';
@@ -63,11 +64,11 @@ Game.prototype.init = function () {
         if (i === players.length - 1 && _this.state['test'] === false) { 
             _this.spawnCheck(players); 
         }
-    })
+    });
     this.objects['food'].init(this, this.objects['players']);
     this.tick(this.delay);
     this.animate();
-    console.log(this.objects.players)
+    console.log(this.objects.players);
     
 };
 
@@ -97,7 +98,7 @@ Game.prototype.animate = function () {
     'use strict';
     this.draw();
     this.ref = window.requestAnimationFrame(this.animate.bind(this));
-    console.log('drawing')
+    console.log('drawing');
 };
 
 Game.prototype.draw = function () {
@@ -134,7 +135,7 @@ Game.prototype.tick = function (delay) {
     this.timeout = setTimeout(_this.tick.bind(this, delay), delay);
     this.update(); 
     
-    console.log('tick')
+    console.log('tick');
 };
 
 Game.prototype.update = function () {
@@ -145,7 +146,7 @@ Game.prototype.update = function () {
     });
     map.collision(game); 
     if (this.allDead()){
-        this.testCounter++
+        this.testCounter++;
         this.reset();
         if (this.state['test']) {
             this.init();
@@ -157,35 +158,34 @@ Game.prototype.allDead = function () {
     'use strict';   
     return this.objects['players'].every(function(player){
         return player.state['dead'];
-    })
+    });
 };
 
 Game.prototype.purge = function () {
     'use strict';
     var players = this.objects['players'];
         players = utils.erase(players)   
-}
+};
 
 Game.prototype.reset = function () {
     'use strict';
     this.draw();
-    this.timeout = this.timeout + 1
+    this.timeout = this.timeout + 1;
     while (this.timeout--){
         clearTimeout(this.timeout);
     }
     window.cancelAnimationFrame(this.ref);
     this.purge();
-}
+};
 
 Game.prototype.concatTests = function () {
     'use strict';
-    
     var testsAPI = tests        
         for (var test in testsAPI) {
             if (tests.hasOwnProperty(test)) {
                 this.allTests.push(testsAPI[test]);
             }
         }
-}
+};
 
     

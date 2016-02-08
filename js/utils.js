@@ -1,24 +1,20 @@
 var utils = (function IIFE() {
-
+    'use strict';
     var publicAPI = {
         
         'keyPress' : function (e) {
             switch (e.keyCode) {
                 case 37: {
                     return 'left';
-                    break;
                 }
                 case 38: {
                     return 'up';
-                    break;
                 } 
                 case 39: { 
                     return 'right';
-                    break;
                 }
                 case 40: {
                     return 'down';
-                    break;
                 }
             }
 
@@ -55,9 +51,9 @@ var utils = (function IIFE() {
 
         'erase' : function (arr) {
             return arr.map(function(value){
-                value.state['dead'] = false;
-                return value.positions.splice(value.positions.length)
-            })
+                value['state']['dead'] = false;
+                return value.positions.splice(value.positions.length);
+            });
         }
 
     };

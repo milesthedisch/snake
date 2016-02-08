@@ -15,13 +15,14 @@ Food.prototype.init = function (game, players) {
 };
 
 Food.prototype.spawn = function (game) {
-    var map = {x: game.canvasWidth, y: game.canvasHeight}
+    'use strict';
+    var map = {x: game.canvasWidth, y: game.canvasHeight};
     this.x = utils.randPos(0, map.x - 1);
     this.y = utils.randPos(0, map.y - 1);
 };
 
 Food.prototype.smart = function (players) {
-    'use strict'
+    'use strict';
     var _this = this;
     var check = false;
     if (typeof this.x === 'number' && typeof this.y === 'number') {

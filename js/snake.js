@@ -14,12 +14,12 @@ var Snake = function(id, dx, dy) {
     };
     this.id = parseInt(1 + id) || null;    
     // Color
-    this.color;
+    this.color = null;
 };
 
 Snake.prototype.eat = function (game, food) {
     'use strict';
-    this.score++
+    this.score++;
     this.positions.push({x: food.x, y: food.y});
     food.init(game, game.objects['players']);
 };
@@ -31,7 +31,7 @@ Snake.prototype.snakeRandSpawn = function (map) {
     var y = utils.randPos(1, mapOffset.y);
     this.positions.pop();
     this.positions.push({x: x, y: y});
-}
+};
 
 Snake.prototype.init = function (players, map, i) {
     'use strict';
@@ -44,32 +44,31 @@ Snake.prototype.init = function (players, map, i) {
 
 Snake.prototype.testSpawn = function (player, map) {
     'use strict';
-    debugger;
     map.allTests[map.testCounter](player);
-}
+};
 
 Snake.prototype.movement = function (directionX, directionY) {
     'use strict';
-    this.dx = directionX
+    this.dx = directionX;
     this.dy = directionY;
 };
 
 Snake.prototype.stop = function (collisionType){
-    'use strict'
+    'use strict';
     if (collisionType !== 'merge') {
         // Store last frames positions in positions
         this.positions = this.lastPos;    
     }
     this.state = {
         'dead': true
-    }
+    };
     this.dx = null;
     this.dy = null;
-}
+};
 
 Snake.prototype.update = function (player) { 
         // Dead flag
-        if (this.state['dead'] === true) return;
+        if (this['state']['dead'] === true) return;
 
         // Last frame
         this.last();
@@ -90,14 +89,14 @@ Snake.prototype.update = function (player) {
 
 Snake.prototype.last = function () {
     this.lastPos = utils.deepCopy(this.positions);
-}
+};
 
 Snake.prototype.next = function () {
     this.ghost = {x: this.tail.x + this.dx, y: this.tail.y + this.dy};
     this.nextPos = utils.deepCopy(this.positions);
     this.nextPos.shift();
     this.nextPos.unshift(this.ghost);
-}
+};
 
 Snake.prototype.bindEventListeners = function (delay) {
     'use strict';
@@ -105,25 +104,25 @@ Snake.prototype.bindEventListeners = function (delay) {
     var _this = this;
     document.onkeydown = _.throttle(function (e) {
         var key = utils.keyPress(e);
-        console.log(key)
+        console.log(key);
         switch (true) {
-            case ('w' === key && _this.dy != 1): {
-                _this.movement(0, -1)
+            case ('w' === key && _this.dy != 1): {;
+                _this.movement(0, -1);
                 break;
             }
 
             case ('a' === key && _this.dx != 1): {
-                _this.movement(-1, 0)
+                _this.movement(-1, 0);
                 break;
             }
 
             case ('s' === key && _this.dy != -1): {
-                _this.movement(0, 1)
+                _this.movement(0, 1);
                 break;
             }
 
             case ('d' === key && _this.dx != -1): {
-                _this.movement(1, 0)
+                _this.movement(1, 0);
                 break;
             }
         }
