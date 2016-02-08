@@ -44,7 +44,8 @@ Snake.prototype.init = function (players, map, i) {
 
 Snake.prototype.testSpawn = function (player, map) {
     'use strict';
-    map.allTests[map.testCounter](player);
+    var test = map.allTests[map.testCounter];
+        test(this);
 };
 
 Snake.prototype.movement = function (directionX, directionY) {
