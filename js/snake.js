@@ -4,7 +4,7 @@ var Snake = function(id, dx, dy) {
     this.positions = []; 
     // Positional values
     this.dx = dx || 0;
-    this.dy = dy || 0; 
+    this.dy = 1 || 0; 
     // Score
     this.score = null; 
     // state
@@ -45,7 +45,7 @@ Snake.prototype.init = function (players, map, i) {
 Snake.prototype.testSpawn = function (player, map) {
     'use strict';
     var test = map.allTests[map.testCounter];
-        test(this);
+        test(this, map);
 };
 
 Snake.prototype.movement = function (directionX, directionY) {
@@ -75,6 +75,8 @@ Snake.prototype.update = function (player) {
         this.last();
 
         // Current frame
+
+        // Head of snake are this.x and this.y.
         this.x = this.positions[0].x;
         this.y = this.positions[0].y;
         this.x += this.dx;
@@ -99,36 +101,7 @@ Snake.prototype.next = function () {
     this.nextPos.unshift(this.ghost);
 };
 
-Snake.prototype.bindEventListeners = function (delay) {
-    'use strict';
 
-    var _this = this;
-    document.onkeydown = _.throttle(function (e) {
-        var key = utils.keyPress(e);
-        console.log(key);
-        switch (true) {
-            case ('w' === key && _this.dy != 1): {;
-                _this.movement(0, -1);
-                break;
-            }
-
-            case ('a' === key && _this.dx != 1): {
-                _this.movement(-1, 0);
-                break;
-            }
-
-            case ('s' === key && _this.dy != -1): {
-                _this.movement(0, 1);
-                break;
-            }
-
-            case ('d' === key && _this.dx != -1): {
-                _this.movement(1, 0);
-                break;
-            }
-        }
-    }, delay);
-};
 
 
 

@@ -15,15 +15,15 @@ var Game = function (canvas, debug, test, players, food) {
     // Canvas
     this.canvas = canvas;
     this.context = this.canvas.getContext('2d');    
-    this.canvasWidth = 11;
-    this.canvasHeight = 11;
+    this.canvasWidth = 51;
+    this.canvasHeight = 51;
     this.rendererHeight = this.canvas.offsetWidth;
     this.rendererWidth = this.canvas.offsetHeight;
 
     // Ratio for renderer and canvas 
     this.ratioWidth = this.rendererWidth / this.canvasWidth;
     this.ratioHeight = this.rendererHeight / this.canvasHeight;
-    this.delay = 1000;
+    this.delay = 4000;
 
     // Test scripts
     this.allTests = [] || null;
@@ -58,14 +58,14 @@ Game.prototype.init = function () {
     'use strict';
     var _this = this;
     this.concatTests();
+    this.bindEventListenersFor2(this.delay);
     this.objects['players'].forEach(function(player, i, players){
         player.init(players, _this, i); 
-        player.bindEventListeners(_this.delay); 
-        if (i === players.length - 1 && _this.state['test'] === false) { 
+        if (i === players.length - 1 && _this.state.test === false) { 
             _this.spawnCheck(players); 
         }
     });
-    this.objects['food'].init(this, this.objects['players']);
+    this.objects['food'].init(this, this.objects.players);
     this.tick(this.delay);
     this.animate();  
 };
@@ -98,6 +98,70 @@ Game.prototype.animate = function () {
     this.ref = window.requestAnimationFrame(this.animate.bind(this));
     console.log('drawing');
 };
+
+Game.prototype.bindEventListenersFor2 = function (delay) {
+    'use strict';
+        var me = this.objects.players;
+            delay = delay || this.delay;
+            
+        document.onkeydown = 
+        _.throttle(function (e) {
+            me.forEach(function(snake,i,collection){
+                    if (snake.id === 1) {
+                    var key = utils.keyPress(e);
+                        switch (true) {
+                            case ('w' === key && snake.dy != 1): {
+                               snake.movement(0, -1);
+                                break;
+                            }
+
+                            case ('a' === key && snake.dx != 1): {
+                               snake.movement(-1, 0);
+                                break;
+                            }
+
+                            case ('s' === key && snake.dy != -1): {
+                               snake.movement(0, 1);
+                                break;
+                            }
+
+                            case ('d' === key && snake != -1): {
+                               snake.movement(1, 0);
+                                break;
+                            }
+                        }
+                    } 
+                    else {
+                          key = utils.keyPress(e);
+                          switch (true) {
+                            case ('up' === key && snake.dy != 1): {
+                                snake.movement(0, -1);
+                                break;
+                            }
+
+                            case ('left' === key && snake.dx != 1): {
+                                snake.movement(-1, 0);
+                                break;
+                            }
+
+                            case ('down' === key && snake.dy != -1): {
+                                snake.movement(0, 1);
+                                break;
+                            }
+
+                            case ('right' === key && snake.dx != -1): {
+                                snake.movement(1, 0);
+                                break;
+                            }
+                        }
+                    }
+                });
+        }, delay - 500);
+};
+
+// Game.prototype.bindEventListener = function (player, callback) {
+    
+// };
 
 Game.prototype.draw = function () {
     'use strict';
@@ -132,28 +196,30 @@ Game.prototype.tick = function (delay) {
     var _this = this;
     this.timeout = setTimeout(_this.tick.bind(this, delay), delay);
     this.update(); 
-    
-    console.log('tick');
+    console.log('tick', this.objects.players);
 };
 
 Game.prototype.update = function () {
     'use strict';
     var game = this;
-    this.objects['players'].forEach(function(player, i){
+    // this.bindEventListeners(this.delay);
+    this.objects.players.forEach(function(player, i){
         player.update(player);     
     });
     map.collision(game); 
-    if (this.allDead()){
-        testCounter++
-        this.gameOver();
-        if (this.state['test'] && this.testCounter < this.allTests.length) {
-            this.init();
-            this.drawSnakes();
-        } else {
+    if (this.state.test === true){
+        if (this.allDead()){
+            this.testCounter++;
             this.gameOver();
+            if (this.state.test && this.testCounter < this.allTests.length) {
+                this.init();
+                this.drawSnakes();
+            } else {
+                this.gameOver();
+            }
         }
     }
-}
+};
 
 Game.prototype.allDead = function () {
     'use strict';   

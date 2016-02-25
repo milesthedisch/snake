@@ -1,7 +1,7 @@
 var utils = (function IIFE() {
     'use strict';
     var publicAPI = {
-        
+
         'keyPress' : function (e) {
             switch (e.keyCode) {
                 case 37: {
@@ -51,10 +51,22 @@ var utils = (function IIFE() {
 
         'erase' : function (arr) {
             return arr.map(function(value){
-                value['state']['dead'] = false;
+                value.state.dead = false;
                 return value.positions.splice(value.positions.length);
             });
-        }
+        },
+
+        'logCollision' : function (player, collision) {
+            collision = collision || collision.constuctor.name;
+            if (typeof player === 'object'){
+                player = Object.keys(player).find(function(val){
+                   if (val === "id") return player[val];
+                });
+            } else {
+              player = isNaN(player) ? parseInt(player) : String(player);
+            }
+            console.log(player, + " HIT: " + collision);
+        }   
 
     };
 
