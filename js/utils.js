@@ -71,7 +71,7 @@ var utils = (function IIFE() {
         'playerFactory' : function (length) {
             var players = [];
             for (var i = 0; i < length; i++){
-                player[i] = new Snake(i);
+                players[i] = new Snake(i);
                 // players[i].dx = i % 2 === 0 ? 1 : -1;
                 // players[i].dy = i % 2 === 0 ? -1 : 1;
             }       
