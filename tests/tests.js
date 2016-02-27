@@ -8,30 +8,34 @@
 ///////////////
 //  Testing  //
 ///////////////
-var tests = (function () {
+var tests = (function (bounds) {
     'use strict';
+   console.log(bounds)
    var i = 1;
+   var halfX = Math.floor(bounds.canvasWidth/2);
+   var halfY = Math.floor(bounds.canvasHeight/2);
    var publicAPI = {
         'wallCollision' : function (player, bounds) {
             // WIP: Map offset to test diffrent size maps.
+
             var _this = player;
-            if (_this.id % 4 === 0 ) { i++ };
+            if (_this.id % 4 === 0 ) { i++; }
             if ( _this.id % 2 === 0){
                 if (_this.id % 4 === 0){
                   _this.dy = 1;
-                  _this.positions[0] = {x: 5, y: 6 + (i - 2 - 1)};
+                  _this.positions[0] = {x: halfX, y: halfY + 1 + i };
                 } else {
                   _this.dy = -1;
-                  _this.positions[0] = {x: 5 , y: 4 - (i - 1) - 1};
+                  _this.positions[0] = {x: halfX , y: halfY - 1 - i };
                 }
             } else {
                 if ((_this.id + 1) % 2 === 0) {
                     if ((_this.id + 1) % 4 === 0) {
                         _this.dx = -1; 
-                        _this.positions[0] = {x: 4 - (i - 1) - 1, y: 5 } 
+                        _this.positions[0] = {x: halfX - 1 - i, y: halfY } 
                     } else {
                         _this.dx = 1;
-                        _this.positions[0] = {x: 6 + (i - 1) - 1, y: 5};
+                        _this.positions[0] = {x: halfX + 1 + i , y: halfY };
                     }  
                 }
             } 
@@ -43,19 +47,19 @@ var tests = (function () {
             if ( _this.id % 2 === 0){
                 if (_this.id % 4 === 0){
                   _this.dy = -1;
-                  _this.positions[0] = {x: 5, y: 6 + (i - 2)}
+                  _this.positions[0] = {x: halfX, y: halfY + 1 + (i - 2)}
                 } else {
                   _this.dy = 1;
-                  _this.positions[0] = {x: 5 , y: 4 - (i)}
+                  _this.positions[0] = {x: halfX , y: halfY - 1  - (i)}
                 }
             } else {
                 if ((_this.id + 1) % 2 === 0) {
                     if ((_this.id + 1) % 4 === 0) {
                         _this.dx = 1; 
-                        _this.positions[0] = {x: 4 - (i - 1), y: 5 } 
+                        _this.positions[0] = {x: 4 - (i - 1), y: halfY } 
                     } else {
                         _this.dx = -1;
-                        _this.positions[0] = {x: 6 + (i - 2), y: 5}
+                        _this.positions[0] = {x: 6 + (i - 2), y: halfY };
                     }  
                 }
             } 
@@ -138,4 +142,4 @@ var tests = (function () {
     }
 
     return publicAPI;
-})()         
+})(Game)         

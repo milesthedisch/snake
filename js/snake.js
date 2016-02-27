@@ -1,10 +1,10 @@
-var Snake = function(id, dx, dy) {
+var Snake = function player(id, dx, dy) {
     'use strict';
     // If i want snakes
     this.positions = []; 
     // Positional values
     this.dx = dx || 0;
-    this.dy = 1 || 0; 
+    this.dy = dy || 0; 
     // Score
     this.score = null; 
     // state

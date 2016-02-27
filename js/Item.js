@@ -1,4 +1,4 @@
-var Food = function() {
+var Food = function food() {
     'use strict';
     this.x = null;
     this.y = null;

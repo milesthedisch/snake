@@ -1,29 +1,29 @@
-var Game = function (canvas, debug, test, players, food) {
+var Game = function game(opts) {
     'use strict';
     // debuggin and testing state
     this.state = {
-        'debug' : false || debug,
-        'test'  : false || test
+        'debug' : false || opts.debug,
+        'test'  : false || opts.test
     };
 
     // collision objects in game
     this.objects = {
-        "players" : players || [],
-        "food" : food || []
+        "players" : opts.players || [],
+        "food" : opts.food || []
     };
 
     // Canvas
-    this.canvas = canvas;
+    this.canvas = opts.canvas || document.querySelector('canvas');
     this.context = this.canvas.getContext('2d');    
-    this.canvasWidth = 51;
-    this.canvasHeight = 51;
+    this.canvasWidth = 21;
+    this.canvasHeight = 21;
     this.rendererHeight = this.canvas.offsetWidth;
     this.rendererWidth = this.canvas.offsetHeight;
 
     // Ratio for renderer and canvas 
     this.ratioWidth = this.rendererWidth / this.canvasWidth;
     this.ratioHeight = this.rendererHeight / this.canvasHeight;
-    this.delay = 4000;
+    this.delay = 1000;
 
     // Test scripts
     this.allTests = [] || null;
@@ -58,13 +58,17 @@ Game.prototype.init = function () {
     'use strict';
     var _this = this;
     this.concatTests();
+
+    // For two players.
     this.bindEventListenersFor2(this.delay);
+
     this.objects['players'].forEach(function(player, i, players){
         player.init(players, _this, i); 
         if (i === players.length - 1 && _this.state.test === false) { 
             _this.spawnCheck(players); 
         }
     });
+
     this.objects['food'].init(this, this.objects.players);
     this.tick(this.delay);
     this.animate();  

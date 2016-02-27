@@ -32,14 +32,19 @@
 	<script>
 		// @params canvas, debug, test, players, food 
 	 	window.addEventListener('DOMContentLoaded', function(){
-   	    var players = [];	
-   	    for (var i = 0; i < 20; i++) {
- 					players[i] = new Snake(i);
- 					// players[i].dx = i % 2 === 0 ? 1 : 0;
- 					// players[i].dy = i % 2 === 0 ? 0 : 1;
-   	    }	
-		    var mice = new Food();
-		    var myGame = new Game(document.querySelector('canvas'), true, false, players, mice);
+	   	    
+	   	    var players = utils.playerFactory(2),	
+	   	    	mice = new Food(),
+	   	    	myGame = new Game(opts);
+		    
+		    var opts = {
+		    	canvas : document.querySelector('canvas'),
+		    	debug: true,
+		    	test: true,
+		    	players: players,
+		    	food: mice
+		    }
+		    
 		    myGame.init();
 		});
 	</script>

@@ -57,16 +57,26 @@ var utils = (function IIFE() {
         },
 
         'logCollision' : function (player, collision) {
-            collision = collision || collision.constuctor.name;
+            collision = collision.constructor.name;
             if (typeof player === 'object'){
-                player = Object.keys(player).find(function(val){
-                   if (val === "id") return player[val];
+                Object.keys(player).find(function(val){
+                   if (val === "id") player = player[val];
                 });
             } else {
-              player = isNaN(player) ? parseInt(player) : String(player);
+              player = player.constructor.name;
             }
             console.log(player, + " HIT: " + collision);
-        }   
+        },
+
+        'playerFactory' : function (length) {
+            var players = [];
+            for (var i = 0; i < length; i++){
+                player[i] = new Snake(i);
+                // players[i].dx = i % 2 === 0 ? 1 : -1;
+                // players[i].dy = i % 2 === 0 ? -1 : 1;
+            }       
+            return players;
+        } 
 
     };
 

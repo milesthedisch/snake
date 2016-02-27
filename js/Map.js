@@ -20,12 +20,12 @@ var map = (function (ut) {
 
             // For loop that loops through each player in the players array.
             for (i; i < playersAmount; i++) {   
-
-
+                
             // Takes that player length of positions.
                 var playerLength = playersArray[i].positions.length;
                 var player = playersArray[i];
                 if (player.state.dead) continue;  
+
             // Filters out all players that are not the current player.   
                 var allOtherPlayers = playersArray.filter(function(players, m){
                     return players !== player;
@@ -56,16 +56,6 @@ var map = (function (ut) {
                         });
                     });
                 });
-                // deadArray.forEach(function(deadplayers){
-                //     deadplayers.positions.forEach(function(deadpos, a){
-                //         player.positions.forEach(function(current, o, col){
-                //             if (deadpos.x === current.x && deadpos.y === current.y) {
-                //                 console.log('HIT DEAD PLAYER');
-                //                 current.stop();
-                //             }
-                //         });
-                //     });
-                // });
                 allOtherPlayers.forEach(function(otherplayer){
                     // if (otherplayer.state['dead'] === true) { return; }
                     if (otherplayer.dx === (player.dx * -1) && otherplayer.dy === (player.dy * -1) || player.dx === (otherplayer.dx * -1) && player.dy === (otherplayer.dy * -1)) {   
@@ -109,7 +99,7 @@ var map = (function (ut) {
 
             // If current player position match the position of the food eat.
                 if ( player.x === items.x && player.y === items.y ) {
-                    console.log('NOM');
+                    ut.logCollision(player, items);
                     // ut.logCollision(player, items);
                     player.eat(game, items);
                 } 
