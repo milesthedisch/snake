@@ -26,7 +26,7 @@ Snake.prototype.eat = function (game, food) {
 
 Snake.prototype.snakeRandSpawn = function (map) {
     'use strict';
-    var mapOffset = {x: map.canvasWidth - 2, y: map.canvasHeight - 2};
+    var mapOffset = {x: map.gameWidth - 2, y: map.gameHeight - 2};
     var x = utils.randPos(1, mapOffset.x);
     var y = utils.randPos(1, mapOffset.y);
     this.positions.pop();
@@ -35,7 +35,7 @@ Snake.prototype.snakeRandSpawn = function (map) {
 
 Snake.prototype.init = function (players, map, i) {
     'use strict';
-    if (map.state['test']) {
+    if (map.state.test) {
         this.testSpawn(this, map);
     } else {
         this.snakeRandSpawn(map);       
@@ -91,6 +91,7 @@ Snake.prototype.update = function (player) {
 };
 
 Snake.prototype.last = function () {
+    this.lastPos = null;
     this.lastPos = utils.deepCopy(this.positions);
 };
 

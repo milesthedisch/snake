@@ -1,23 +1,24 @@
-// Test one head on collision
-
-// Collide the snakes head on with each other.
-// The snakes head should merge into one pixel.
-
 // ! Should try to make this test functions inherit from the Game constuctor !
 
 ///////////////
 //  Testing  //
 ///////////////
-var tests = (function (bounds) {
+
+// TODO 
+
+// var Tests = function (player, bounds) {
+//     this.player = player || null;
+//     this.bounds = bounds || null;
+//     this.i = 1;
+// };
+
+var tests = (function () {
     'use strict';
-   console.log(bounds)
    var i = 1;
-   var halfX = Math.floor(bounds.canvasWidth/2);
-   var halfY = Math.floor(bounds.canvasHeight/2);
    var publicAPI = {
         'wallCollision' : function (player, bounds) {
-            // WIP: Map offset to test diffrent size maps.
-
+            var halfX = Math.floor(bounds.gameWidth/2);
+            var halfY = Math.floor(bounds.gameHeight/2);
             var _this = player;
             if (_this.id % 4 === 0 ) { i++; }
             if ( _this.id % 2 === 0){
@@ -32,7 +33,7 @@ var tests = (function (bounds) {
                 if ((_this.id + 1) % 2 === 0) {
                     if ((_this.id + 1) % 4 === 0) {
                         _this.dx = -1; 
-                        _this.positions[0] = {x: halfX - 1 - i, y: halfY } 
+                        _this.positions[0] = {x: halfX - 1 - i, y: halfY };
                     } else {
                         _this.dx = 1;
                         _this.positions[0] = {x: halfX + 1 + i , y: halfY };
@@ -40,91 +41,95 @@ var tests = (function (bounds) {
                 }
             } 
         },
-        'headOnCollision' : function (player) {
-            var offset = 1 || offset;
+        'headOnCollision' : function (player, bounds) {
+            var halfX = Math.floor(bounds.gameWidth/2);
+            var halfY = Math.floor(bounds.gameHeight/2);
             var _this = player;
             if (_this.id % 4 === 0 ) { i++ };
             if ( _this.id % 2 === 0){
                 if (_this.id % 4 === 0){
                   _this.dy = -1;
-                  _this.positions[0] = {x: halfX, y: halfY + 1 + (i - 2)}
+                  _this.positions[0] = {x: halfX, y: halfY + 1 + (i - 2)};
                 } else {
                   _this.dy = 1;
-                  _this.positions[0] = {x: halfX , y: halfY - 1  - (i)}
+                  _this.positions[0] = {x: halfX , y: halfY - 1  - (i)};
                 }
             } else {
                 if ((_this.id + 1) % 2 === 0) {
                     if ((_this.id + 1) % 4 === 0) {
                         _this.dx = 1; 
-                        _this.positions[0] = {x: 4 - (i - 1), y: halfY } 
+                        _this.positions[0] = {x: halfX - 1 - (i - 1), y: halfY};
                     } else {
                         _this.dx = -1;
-                        _this.positions[0] = {x: 6 + (i - 2), y: halfY };
+                        _this.positions[0] = {x: halfX + 1 + (i - 2), y: halfY};
                     }  
                 }
             } 
         },
-        'headOnCollision2' : function (player) {
-            var offset = 1 || offset;
+        'headOnCollision2' : function (player, bounds) {
+            var halfX = Math.floor(bounds.gameWidth/2);
+            var halfY = Math.floor(bounds.gameHeight/2);
             var _this = player;
             if (_this.id % 4 === 0 ) { i++ };
             if ( _this.id % 2 === 0){
                 if (_this.id % 4 === 0){
                   _this.dy = -1;
-                  _this.positions[0] = {x: 5, y: 9 + (i - 2)}
+                  _this.positions[0] = {x: halfX, y: halfY + 4 + (i - 2)}
                 } else {
                   _this.dy = 1;
-                  _this.positions[0] = {x: 5 , y: 2 - (i - 1)}
+                  _this.positions[0] = {x: halfX , y: halfY - 3 - (i - 1)}
                 }
             } else {
                 if ((_this.id + 1) % 2 === 0) {
                     if ((_this.id + 1) % 4 === 0) {
                         _this.dx = 1; 
-                        _this.positions[0] = {x: 2 - (i - 1), y: 5 } 
+                        _this.positions[0] = { x: halfX - 3 - (i - 1), y: halfY } 
                     } else {
                         _this.dx = -1;
-                        _this.positions[0] = {x: 9 + (i - 2), y: 5}   
+                        _this.positions[0] = {  x: halfX - 4 + (i - 2), y: halfY }   
                     }  
                 }
             } 
         },
-        'bodyCollision' : function (player) {
-            var offset = 1 || offset;
+        'bodyCollision' : function (player, bounds) {
+            var halfX = Math.floor(bounds.gameWidth/2);
+            var halfY = Math.floor(bounds.gameHeight/2);
             var _this = player;
             if (_this.id % 4 === 0 ) { i++ };
             if ( _this.id % 2 === 0){
                 if (_this.id % 4 === 0){
                   _this.dy = -1;
-                  _this.positions[0] = {x: 5, y: 9 + (i - 2)}
+                  _this.positions[0] = {x: 5, y: halfY + 4 + (i - 2)}
                 } else {
                   _this.dy = 1;
-                  _this.positions[0] = {x: 5 , y: 2 - (i - 1)}
+                  _this.positions[0] = {x: 5 , y: halfY - 3 - (i - 1)}
                 }
             } else {
                 if ((_this.id + 1) % 2 === 0) {
                     if ((_this.id + 1) % 4 === 0) {
                         _this.dx = 1; 
-                        _this.positions[0] = {x: 3 - (i - 1), y: 5 } 
+                        _this.positions[0] = {x: halfX - 2 - (i - 1), y: 5 } 
                     } else {
                         _this.dx = -1;
-                        _this.positions[0] = {x: 7 + (i - 1), y: 5}
-                        _this.positions.push({x: 7 + (i), y: 5})    
+                        _this.positions[0] = {x: halfX + 2 + (i - 1), y: 5};
+                        // _this.positions.push({x: halfX + 2 + (i), y: 5})    
                     }  
                 }
             } 
         },
-        'bodyCollision2' : function (player){
-            var offset = 1 || offset;
+        'bodyCollision2' : function (player, bounds){
+            var halfX = Math.floor(bounds.gameWidth/2);
+            var halfY = Math.floor(bounds.gameHeight/2);
             var _this = player;
             if (_this.id % 4 === 0 ) { i++ };
             if ( _this.id % 2 === 0){
                 if (_this.id % 4 === 0){
                   _this.dy = -1;
-                  _this.positions[0] = {x: 5, y: 8 + (i - 2)}
+                  _this.positions[0] = {x: 5, y: 8 + (i - 2)};
                 } else {
                   _this.dy = 1;
-                  _this.positions[0] = {x: 5 , y: 2 - (i - 1)}
-                  _this.positions.push({x: 5, y: 2 - (i)})
+                  _this.positions[0] = {x: 5 , y: 2 - (i - 1)};
+                  _this.positions.push({x: 5, y: 2 - (i)});
 
                 }
             } else {
@@ -134,12 +139,11 @@ var tests = (function (bounds) {
                         _this.positions[0] = {x: 3 - (i - 1), y: 5 } 
                     } else {
                         _this.dx = -1;
-                        _this.positions[0] = {x: 8 + (i - 1), y: 5}
+                        _this.positions[0] = {x: 8 + (i - 1), y: 5};
                     }  
                 }
             } 
         }
-    }
-
+    };
     return publicAPI;
-})(Game)         
+})()         

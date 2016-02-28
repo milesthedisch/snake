@@ -15,15 +15,15 @@ var Game = function game(opts) {
     // Canvas
     this.canvas = opts.canvas || document.querySelector('canvas');
     this.context = this.canvas.getContext('2d');    
-    this.canvasWidth = 21;
-    this.canvasHeight = 21;
+    this.gameWidth = 23;
+    this.gameHeight = 23;
     this.rendererHeight = this.canvas.offsetWidth;
     this.rendererWidth = this.canvas.offsetHeight;
 
-    // Ratio for renderer and canvas 
-    this.ratioWidth = this.rendererWidth / this.canvasWidth;
-    this.ratioHeight = this.rendererHeight / this.canvasHeight;
-    this.delay = 1000;
+    // Ratio for renderer and game 
+    this.ratioWidth = this.rendererWidth / this.gameWidth;
+    this.ratioHeight = this.rendererHeight / this.gameHeight;
+    this.delay = opts.delay || 1000;
 
     // Test scripts
     this.allTests = [] || null;
@@ -57,7 +57,7 @@ Game.prototype.spawnCheck = function (players) {
 Game.prototype.init = function () {
     'use strict';
     var _this = this;
-    this.concatTests();
+    this.initTests();
 
     // For two players.
     this.bindEventListenersFor2(this.delay);
@@ -160,7 +160,7 @@ Game.prototype.bindEventListenersFor2 = function (delay) {
                         }
                     }
                 });
-        }, delay - 500);
+        }, delay);
 };
 
 // Game.prototype.bindEventListener = function (player, callback) {
@@ -200,7 +200,7 @@ Game.prototype.tick = function (delay) {
     var _this = this;
     this.timeout = setTimeout(_this.tick.bind(this, delay), delay);
     this.update(); 
-    console.log('tick', this.objects.players);
+    console.log('tick');
 };
 
 Game.prototype.update = function () {
@@ -249,7 +249,7 @@ Game.prototype.gameOver = function () {
     this.purge();
 };
 
-Game.prototype.concatTests = function () {
+Game.prototype.initTests = function () {
     'use strict';
     var testsAPI = tests        
         for (var test in testsAPI) {

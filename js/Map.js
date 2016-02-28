@@ -20,7 +20,7 @@ var map = (function (ut) {
 
             // For loop that loops through each player in the players array.
             for (i; i < playersAmount; i++) {   
-                
+
             // Takes that player length of positions.
                 var playerLength = playersArray[i].positions.length;
                 var player = playersArray[i];
@@ -41,7 +41,7 @@ var map = (function (ut) {
                 }
 
              // If current player is less than the bounds of the map then 
-                if (player.x < 0 || player.y < 0 || player.x > game.canvasWidth - 1 || player.y > game.canvasHeight - 1) {
+                if (player.x < 0 || player.y < 0 || player.x > game.gameWidth - 1 || player.y > game.gameHeight - 1) {
                     console.log('players:', player.id, "HIT MAP");
                     player.stop();
                 }
@@ -51,6 +51,7 @@ var map = (function (ut) {
                     deadArray.forEach(function(zom,b,ie){
                         zom.positions.forEach(function(tomb,s,tone){
                             if (tomb.x === pos.x && tomb.y === pos.y) {
+                                console.log('HIT', 'DEADPLAYER');
                                 player.stop();
                             }
                         });

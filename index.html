@@ -30,25 +30,29 @@
 		<canvas id="canvas" width="700" height="700"></canvas>	
 	</div>
 	<script>
+
 		// @params opts
 		// @params opts.canvas, @default document.querySelector('canvas') * Canvas element for rendering.
 		// @params opts.debug, @default false * debug used for lines on screen canvas and movement after death.
 		// @params opts.test, @default false * Run unit tests for collisions.
 		// @params opts.players, @default [] * Player objects in the game.
 		// @params opts.food, @default [] * Food objects in the game
+
 	 	window.addEventListener('DOMContentLoaded', function(){
 		     
-	   	    var players = utils.playerFactory(2),	
+	   	    var players = utils.playerFactory(10),	
 	   	    	mice = new Food(),
 	   	    	myGame = new Game({
 			    	canvas : document.querySelector('canvas'),
 			    	debug: true,
-			    	test: true,
+			    	test: false,
+			    	delay: 100,
 			    	players: players,
 			    	food: mice
 	    		});
 		    
 		    myGame.init();
+		    debugger;
 		});
 	</script>
 </body>

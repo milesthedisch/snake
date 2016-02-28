@@ -16,7 +16,7 @@ Food.prototype.init = function (game, players) {
 
 Food.prototype.spawn = function (game) {
     'use strict';
-    var map = {x: game.canvasWidth, y: game.canvasHeight};
+    var map = {x: game.gameWidth, y: game.gameHeight};
     this.x = utils.randPos(0, map.x - 1);
     this.y = utils.randPos(0, map.y - 1);
 };
