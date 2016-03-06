@@ -46,7 +46,8 @@ var map = (function (ut) {
                     player.stop();
                 }
 
-            // Go through the filtered array of dead players and for each dead position  
+            // Go through the filtered array of players and for each dead position check the positions 
+            // of the players position with the dead position. 
                 player.positions.forEach(function(pos,i,tion){
                     deadArray.forEach(function(zom,b,ie){
                         zom.positions.forEach(function(tomb,s,tone){
@@ -57,9 +58,13 @@ var map = (function (ut) {
                         });
                     });
                 });
+
+            // Go through each of all the other players
                 allOtherPlayers.forEach(function(otherplayer){
                     // if (otherplayer.state['dead'] === true) { return; }
+                    // Check if they have the same directional value and if there last positions equal eachother.
                     if (otherplayer.dx === (player.dx * -1) && otherplayer.dy === (player.dy * -1) || player.dx === (otherplayer.dx * -1) && player.dy === (otherplayer.dy * -1)) {   
+                        // If the player last position is the same as the opposite players last position or 
                         if ((otherplayer.lastPos[0].x === player.x && otherplayer.lastPos[0].y === player.y) || (player.lastPos[0].x === otherplayer.x && player.lastPos[0].y === otherplayer.y)){
                                     console.log('head collision', 'player:', player.positions[0], 'otherplayer:', otherplayer.positions[0],
                                                 'playerGhost:', player.ghost, 'otherPlayerGhost:', otherplayer.ghost);

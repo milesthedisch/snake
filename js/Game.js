@@ -1,9 +1,17 @@
 var Game = function game(opts) {
     'use strict';
+    opts = _.defaults(opts, {
+        debug: false, 
+        test: false, 
+        players: [new Snake()], 
+        food: [new Food()], 
+        canvas: document.querySelector('canvas'),
+        delay: 900
+    });
     // debuggin and testing state
     this.state = {
-        'debug' : false || opts.debug,
-        'test'  : false || opts.test
+        'debug' : opts.debug || false,
+        'test' : opts.test || false
     };
 
     // collision objects in game
@@ -15,15 +23,15 @@ var Game = function game(opts) {
     // Canvas
     this.canvas = opts.canvas || document.querySelector('canvas');
     this.context = this.canvas.getContext('2d');    
-    this.gameWidth = 23;
-    this.gameHeight = 23;
+    this.gameWidth = 22;
+    this.gameHeight = 22;
     this.rendererHeight = this.canvas.offsetWidth;
     this.rendererWidth = this.canvas.offsetHeight;
 
     // Ratio for renderer and game 
     this.ratioWidth = this.rendererWidth / this.gameWidth;
     this.ratioHeight = this.rendererHeight / this.gameHeight;
-    this.delay = opts.delay || 1000;
+    this.delay = opts.delay || 900;
 
     // Test scripts
     this.allTests = [] || null;
@@ -57,26 +65,32 @@ Game.prototype.spawnCheck = function (players) {
 Game.prototype.init = function () {
     'use strict';
     var _this = this;
-    this.initTests();
+    if (this.state.debug) { 
+        this.initTests(); 
+        debugger;
+    }
 
     // For two players.
     this.bindEventListenersFor2(this.delay);
 
-    this.objects['players'].forEach(function(player, i, players){
+    this.objects.players.forEach(function(player, i, players){
         player.init(players, _this, i); 
         if (i === players.length - 1 && _this.state.test === false) { 
             _this.spawnCheck(players); 
         }
     });
 
-    this.objects['food'].init(this, this.objects.players);
+    this.objects.food.forEach(function(item){
+        item.init(_this, _this.objects.players);
+    });
+
     this.tick(this.delay);
     this.animate();  
 };
 
 Game.prototype.drawGridLines = function draw() {
     'use strict';
-    if (this.state['debug']) {
+    if (this.state.debug) {
         // Horizontal Lines 
         for (var i = 0; i < this.rendererWidth; i = i + this.ratioWidth) {
             this.context.beginPath();
@@ -106,8 +120,9 @@ Game.prototype.animate = function () {
 Game.prototype.bindEventListenersFor2 = function (delay) {
     'use strict';
         var me = this.objects.players;
-            delay = delay || this.delay;
-            
+        if (!delay) {
+            throw "Delay is supposed to be number greater than 0";
+        }  
         document.onkeydown = 
         _.throttle(function (e) {
             me.forEach(function(snake,i,collection){
@@ -234,8 +249,8 @@ Game.prototype.allDead = function () {
 
 Game.prototype.purge = function () {
     'use strict';
-    var players = this.objects['players'];
-        players = utils.erase(players)   
+    var players = this.objects.players;
+        players = utils.erase(players);   
 };
 
 Game.prototype.gameOver = function () {

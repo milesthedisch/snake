@@ -67,6 +67,13 @@ Snake.prototype.stop = function (collisionType){
     this.dy = null;
 };
 
+Snake.prototype.clear = function () {
+   var keys = Object.keys(this);
+   for (var val in keys) {
+        keys[val] = undefined;
+   }
+};
+
 Snake.prototype.update = function (player) { 
         // Dead flag
         if (this['state']['dead'] === true) return;

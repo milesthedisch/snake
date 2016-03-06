@@ -1,7 +1,6 @@
-var utils = (function IIFE() {
+var utils = (function IIFE(global) {
     'use strict';
     var publicAPI = {
-
         'keyPress' : function (e) {
             switch (e.keyCode) {
                 case 37: {
@@ -17,7 +16,6 @@ var utils = (function IIFE() {
                     return 'down';
                 }
             }
-
             return (String.fromCharCode(e.keyCode)).toLowerCase();
         },
 
@@ -70,15 +68,19 @@ var utils = (function IIFE() {
 
         'playerFactory' : function (length) {
             var players = [];
-            for (var i = 0; i < length; i++){
-                players[i] = new Snake(i);
-                // players[i].dx = i % 2 === 0 ? 1 : -1;
-                // players[i].dy = i % 2 === 0 ? -1 : 1;
-            }       
+            for (var i = length; 0 < i; --i) {
+                players.push(new Snake(i));
+            }
             return players;
-        } 
+        },
 
+        'itemFactory' : function (length) {
+            var items = [];
+            for (var i = length; 0 < i; --i) {
+                items.push(new Food(i));
+            }
+            return items;
+        }
     };
-
     return publicAPI;
-})();
+})(window || window.document);

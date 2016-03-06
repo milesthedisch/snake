@@ -14,38 +14,81 @@
 
 var tests = (function () {
     'use strict';
+   
    var i = 1;
-   var publicAPI = {
-        'wallCollision' : function (player, bounds) {
-            var halfX = Math.floor(bounds.gameWidth/2);
-            var halfY = Math.floor(bounds.gameHeight/2);
-            var _this = player;
-            if (_this.id % 4 === 0 ) { i++; }
-            if ( _this.id % 2 === 0){
-                if (_this.id % 4 === 0){
-                  _this.dy = 1;
-                  _this.positions[0] = {x: halfX, y: halfY + 1 + i };
+   
+   /*
+   * @params offsets {object} n: ,s: ,e: ,w:
+   * @params callback {function} 
+   */
+
+   var helper = function (offsets, direction, player, bounds) {
+        // Offsets for each players
+        var top = offsets.top;
+        var down = offsets.down;
+        var right = offsets.right;
+        var left = offsets.left;
+
+        // Map directions
+        var N = direction.n;
+        var S = direction.s;
+        var E = direction.e;
+        var W = direction.w;
+        
+        // Half of the map 
+        var halfX = Math.floor(bounds.gameWidth/2);
+        var halfY = Math.floor(bounds.gameHeight/2);
+        
+        if (player.x < 1 || player.y < 1 || player.x > bounds.gameWidth || player.y > bounds.gameHeight) {
+                player.clear();
+        } else {
+         if (player.id % 4 === 0 ) { i++; }
+            if ( player.id % 2 === 0){
+                if (player.id % 4 === 0){
+                    // North
+                  player.dy = N;
+                  player.positions[0] = {x: halfX, y: halfY + top + i };
                 } else {
-                  _this.dy = -1;
-                  _this.positions[0] = {x: halfX , y: halfY - 1 - i };
+                   // South
+                  player.dy = S;
+                  player.positions[0] = {x: halfX , y: halfY - down - i };
                 }
             } else {
-                if ((_this.id + 1) % 2 === 0) {
-                    if ((_this.id + 1) % 4 === 0) {
-                        _this.dx = -1; 
-                        _this.positions[0] = {x: halfX - 1 - i, y: halfY };
+                if ((player.id + 1) % 2 === 0) {
+                    if ((player.id + 1) % 4 === 0) {
+                        // East
+                        player.dx = E; 
+                        player.positions[0] = {x: halfX - right - i, y: halfY };
                     } else {
-                        _this.dx = 1;
-                        _this.positions[0] = {x: halfX + 1 + i , y: halfY };
+                        // West
+                        player.dx = W;
+                        player.positions[0] = {x: halfX + left + i , y: halfY };
                     }  
                 }
             } 
+        }
+   };
+   var publicAPI = {
+        'wallCollision' : function (player, bounds) {
+          var offsets = {
+            top: 1,
+            right: 1,
+            down: 1,
+            left: 1,
+          };
+          var direction = {
+            n: 1,
+            s: -1,
+            e: -1,
+            w: 1
+          };
+          helper(offsets, direction, player, bounds);
         },
-        'headOnCollision' : function (player, bounds) {
+        'headOnCollision' : function (player, bounds) { 
             var halfX = Math.floor(bounds.gameWidth/2);
             var halfY = Math.floor(bounds.gameHeight/2);
             var _this = player;
-            if (_this.id % 4 === 0 ) { i++ };
+            if (_this.id % 4 === 0 ) { i++ ;}
             if ( _this.id % 2 === 0){
                 if (_this.id % 4 === 0){
                   _this.dy = -1;
@@ -74,10 +117,10 @@ var tests = (function () {
             if ( _this.id % 2 === 0){
                 if (_this.id % 4 === 0){
                   _this.dy = -1;
-                  _this.positions[0] = {x: halfX, y: halfY + 4 + (i - 2)}
+                  _this.positions[0] = {x: halfX, y: halfY + 4 + (i - 2)};
                 } else {
                   _this.dy = 1;
-                  _this.positions[0] = {x: halfX , y: halfY - 3 - (i - 1)}
+                  _this.positions[0] = {x: halfX , y: halfY - 3 - (i - 1)};
                 }
             } else {
                 if ((_this.id + 1) % 2 === 0) {
