@@ -16,13 +16,13 @@ var tests = (function () {
     'use strict';
    
    var i = 1;
-   
    /*
-   * @params offsets {object} n: ,s: ,e: ,w:
+   * @params offsets {object} top: {int}, down: {int}, right: {int}, left: {int}
+   * @params direction {object} n: {int}, s: {int}, e: {int}, w: {int}
    * @params callback {function} 
    */
 
-   var helper = function (offsets, direction, player, bounds) {
+   var helper = function (offsets, direction, player, bounds, increment) {
         // Offsets for each players
         var top = offsets.top;
         var down = offsets.down;

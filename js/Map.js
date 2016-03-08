@@ -1,4 +1,4 @@
-var map = (function (ut) {
+    var map = (function (ut) {
     'use strict';
     var publicAPI = {
         'collision': function detection(game, coordinates) {
@@ -65,7 +65,9 @@ var map = (function (ut) {
                     // Check if they have the same directional value and if there last positions equal eachother.
                     if (otherplayer.dx === (player.dx * -1) && otherplayer.dy === (player.dy * -1) || player.dx === (otherplayer.dx * -1) && player.dy === (otherplayer.dy * -1)) {   
                         // If the player last position is the same as the opposite players last position or 
-                        if ((otherplayer.lastPos[0].x === player.x && otherplayer.lastPos[0].y === player.y) || (player.lastPos[0].x === otherplayer.x && player.lastPos[0].y === otherplayer.y)){
+                        console.log(otherplayer.lastPos, player.lastPos);
+                        if ((otherplayer.lastPos[0].x === player.lastPos[0].x && otherplayer.lastPos[0].y === player.lastPos.y) || (player.lastPos[0].x === otherplayer.lastPos[0].x && player.lastPos[0].y === otherplayer.lastPos[0].y)){
+                            debugger;
                                     console.log('head collision', 'player:', player.positions[0], 'otherplayer:', otherplayer.positions[0],
                                                 'playerGhost:', player.ghost, 'otherPlayerGhost:', otherplayer.ghost);
                                     otherplayer.stop();

@@ -23,8 +23,8 @@ var Game = function game(opts) {
     // Canvas
     this.canvas = opts.canvas || document.querySelector('canvas');
     this.context = this.canvas.getContext('2d');    
-    this.gameWidth = 22;
-    this.gameHeight = 22;
+    this.gameWidth = 11;
+    this.gameHeight = 11;
     this.rendererHeight = this.canvas.offsetWidth;
     this.rendererWidth = this.canvas.offsetHeight;
 

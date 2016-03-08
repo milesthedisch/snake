@@ -82,7 +82,6 @@ Snake.prototype.update = function (player) {
         this.last();
 
         // Current frame
-
         // Head of snake are this.x and this.y.
         this.x = this.positions[0].x;
         this.y = this.positions[0].y;
