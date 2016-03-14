@@ -24,7 +24,7 @@
             // Takes that player length of positions.
                 var playerLength = playersArray[i].positions.length;
                 var player = playersArray[i];
-                if (player.state.dead) continue;  
+                // if (player.state.dead) continue;  
 
             // Filters out all players that are not the current player.   
                 var allOtherPlayers = playersArray.filter(function(players, m){
@@ -61,13 +61,12 @@
 
             // Go through each of all the other players
                 allOtherPlayers.forEach(function(otherplayer){
-                    // if (otherplayer.state['dead'] === true) { return; }
                     // Check if they have the same directional value and if there last positions equal eachother.
-                    if (otherplayer.dx === (player.dx * -1) && otherplayer.dy === (player.dy * -1) || player.dx === (otherplayer.dx * -1) && player.dy === (otherplayer.dy * -1)) {   
-                        // If the player last position is the same as the opposite players last position or 
-                        console.log(otherplayer.lastPos, player.lastPos);
-                        if ((otherplayer.lastPos[0].x === player.lastPos[0].x && otherplayer.lastPos[0].y === player.lastPos.y) || (player.lastPos[0].x === otherplayer.lastPos[0].x && player.lastPos[0].y === otherplayer.lastPos[0].y)){
-                            debugger;
+                    if (otherplayer.dx === (player.dx * -1) && otherplayer.dy === (player.dy * -1) ||
+                        player.dx === (otherplayer.dx * -1) && player.dy === (otherplayer.dy * -1)) {   
+                        console.log('otherplayer: ', otherplayer.lastPos[0], 'player: ', player.positions[0]);
+                        if ((otherplayer.lastPos[0].x === player.x && otherplayer.lastPos[0].y === player.y) || 
+                            (player.lastPos[0].x === otherplayer.positions[0].x && player.lastPos[0].y === otherplayer.positions[0].y)){
                                     console.log('head collision', 'player:', player.positions[0], 'otherplayer:', otherplayer.positions[0],
                                                 'playerGhost:', player.ghost, 'otherPlayerGhost:', otherplayer.ghost);
                                     otherplayer.stop();

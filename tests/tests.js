@@ -46,23 +46,27 @@ var tests = (function () {
             if ( player.id % 2 === 0){
                 if (player.id % 4 === 0){
                     // North
-                  player.dy = N;
-                  player.positions[0] = {x: halfX, y: halfY + top + i };
+                  player.dy = N.y;
+                  player.dx = N.x;
+                  player.positions[0] = {x: halfX + top.x, y: halfY + top.y + i };
                 } else {
                    // South
-                  player.dy = S;
-                  player.positions[0] = {x: halfX , y: halfY - down - i };
+                  player.dy = S.y;
+                  player.dx = S.x;
+                  player.positions[0] = {x: halfX + down.x, y: halfY - down.y - i };
                 }
             } else {
                 if ((player.id + 1) % 2 === 0) {
                     if ((player.id + 1) % 4 === 0) {
                         // East
-                        player.dx = E; 
-                        player.positions[0] = {x: halfX - right - i, y: halfY };
+                        player.dy = E.y;
+                        player.dx = E.x;
+                        player.positions[0] = {x: halfX - right.x - i, y: halfY + right.y };
                     } else {
                         // West
-                        player.dx = W;
-                        player.positions[0] = {x: halfX + left + i , y: halfY };
+                        player.dy = W.y;
+                        player.dx = W.x;
+                        player.positions[0] = {x: halfX + left.x + i , y: halfY + right.y };
                     }  
                 }
             } 
@@ -71,16 +75,16 @@ var tests = (function () {
    var publicAPI = {
         'wallCollision' : function (player, bounds) {
           var offsets = {
-            top: 1,
-            right: 1,
-            down: 1,
-            left: 1,
+            top: { x: 0, y: 1 },
+            right: { x: -1, y: 2 },
+            down: { x: 0, y: 1 },
+            left: { x: 1, y: 0 }
           };
           var direction = {
-            n: 1,
-            s: -1,
-            e: -1,
-            w: 1
+            n: {x: 1, y: 0},
+            e: {x: 0, y: -1},
+            s: {x: 0, y: 1},
+            w: {x: 0, y: 1}
           };
           helper(offsets, direction, player, bounds);
         },

@@ -3,8 +3,8 @@ var Snake = function player(id, dx, dy) {
     // If i want snakes
     this.positions = []; 
     // Positional values
-    this.dx = dx || 0;
-    this.dy = dy || 0; 
+    this.dx = dx === undefined ? 0 : dx;
+    this.dy = dx === undefined ? 0 : dy; 
     // Score
     this.score = null; 
     // state
@@ -29,6 +29,9 @@ Snake.prototype.snakeRandSpawn = function (map) {
     var mapOffset = {x: map.gameWidth - 2, y: map.gameHeight - 2};
     var x = utils.randPos(1, mapOffset.x);
     var y = utils.randPos(1, mapOffset.y);
+    var dirs = utils.randomSet();
+    this.dx = dirs.x;
+    this.dy = dirs.y;
     this.positions.pop();
     this.positions.push({x: x, y: y});
 };

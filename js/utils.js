@@ -66,10 +66,11 @@ var utils = (function IIFE(global) {
             console.log(player, + " HIT: " + collision);
         },
 
-        'playerFactory' : function (length) {
+        'playerFactory' : function (length, dx, dy) {
             var players = [];
+            console.log(dx, dy);
             for (var i = length; 0 < i; --i) {
-                players.push(new Snake(i));
+                players.push(new Snake(i, dx, dy));
             }
             return players;
         },
@@ -80,6 +81,13 @@ var utils = (function IIFE(global) {
                 items.push(new Food(i));
             }
             return items;
+        },
+
+        'randomSet': function () {
+            var set = {};
+            set.x = Math.round(Math.random()) ? Math.round(Math.random()) * -1 : Math.round(Math.random());
+            set.y = set.x ? 0 : Math.round(Math.random()) ? -1 : 1;
+            return set;
         }
     };
     return publicAPI;

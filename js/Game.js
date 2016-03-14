@@ -1,3 +1,4 @@
+
 var Game = function game(opts) {
     'use strict';
     opts = _.defaults(opts, {
@@ -23,8 +24,8 @@ var Game = function game(opts) {
     // Canvas
     this.canvas = opts.canvas || document.querySelector('canvas');
     this.context = this.canvas.getContext('2d');    
-    this.gameWidth = 11;
-    this.gameHeight = 11;
+    this.gameWidth = 21;
+    this.gameHeight = 21;
     this.rendererHeight = this.canvas.offsetWidth;
     this.rendererWidth = this.canvas.offsetHeight;
 
@@ -114,7 +115,7 @@ Game.prototype.animate = function () {
     'use strict';
     this.draw();
     this.ref = window.requestAnimationFrame(this.animate.bind(this));
-    console.log('drawing');
+    // console.log('drawing');
 };
 
 Game.prototype.bindEventListenersFor2 = function (delay) {
@@ -125,8 +126,9 @@ Game.prototype.bindEventListenersFor2 = function (delay) {
         }  
         document.onkeydown = 
         _.throttle(function (e) {
+            console.log(me);
             me.forEach(function(snake,i,collection){
-                    if (snake.id === 1) {
+                    if (snake.id === 2) {
                     var key = utils.keyPress(e);
                         switch (true) {
                             case ('w' === key && snake.dy != 1): {
@@ -150,8 +152,9 @@ Game.prototype.bindEventListenersFor2 = function (delay) {
                             }
                         }
                     } 
-                    else {
+                    else {                        
                           key = utils.keyPress(e);
+                          console.log(key);
                           switch (true) {
                             case ('up' === key && snake.dy != 1): {
                                 snake.movement(0, -1);
@@ -177,10 +180,6 @@ Game.prototype.bindEventListenersFor2 = function (delay) {
                 });
         }, delay);
 };
-
-// Game.prototype.bindEventListener = function (player, callback) {
-    
-// };
 
 Game.prototype.draw = function () {
     'use strict';
@@ -215,7 +214,7 @@ Game.prototype.tick = function (delay) {
     var _this = this;
     this.timeout = setTimeout(_this.tick.bind(this, delay), delay);
     this.update(); 
-    console.log('tick');
+    // console.log('tick');
 };
 
 Game.prototype.update = function () {
